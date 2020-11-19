@@ -1,4 +1,4 @@
-# Bandit Level 0
+ï»¿# Bandit Level 0
 
 Level Goal)
 -The goal of this level is for you to log into the game using SSH.
@@ -12,18 +12,18 @@ Helpful Reading Material)
 -Secure Shell (SSH) on Wikipedia
 -How to use SSH on wikiHow
 
-bandit Level 0 ÇØ°á¹ı)
-XshellÀÌ¿ëÇÏ¿© ssh¿¡ Á¢¼Ó.
+bandit Level 0 í•´ê²°ë²•)
+Xshellì´ìš©í•˜ì—¬ sshì— ì ‘ì†.
 Host :  bandit.labs.overthewire.org
 Port : 2220
 ID : bandit0
 pwd : bandit0
-±×³É ´Ü¼øÈ÷ ssh·Î Á¢±ÙÇÏ´Â ¹æ¹ıÀ» ¾Ë¸é ÇØ°á
+ê·¸ëƒ¥ ë‹¨ìˆœíˆ sshë¡œ ì ‘ê·¼í•˜ëŠ” ë°©ë²•ì„ ì•Œë©´ í•´ê²°
 
 
 
 
-#Bandit Level 0 ¡æ Level 1
+#Bandit Level 0 â†’ Level 1
 Level Goal)
 -The password for the next level is stored in a file called readme located in the home directory. 
 Use this password to log into bandit1 using SSH. Whenever you find a password for a level, use SSH (on port 2220) to log into that level and continue the game.
@@ -31,17 +31,15 @@ Use this password to log into bandit1 using SSH. Whenever you find a password fo
 Commands you may need to solve this level)
 -ls, cd, cat, file, du, find
 
-#Bandit Level 0 ¡æ Level 1 ÇØ°á¹ı)
-È¨ µğ·ºÅÍ¸®¿¡ ÀÖ´Â readme¿¡ ºñ¹øÀÌ ÀÖ´Ù°í ¸í½Ã.
-pwd·Î ÇöÀç °æ·Î ¾Ë¾Æ³¿ -> /home/bandit0 ¿¡ ÀÖÀ½. »óÀ§ µğ·ºÅä¸®(home)¿¡ readme°¡ ÀÖ´Ù°í ÇßÀ¸´Ï
-cd ../·Î »óÀ§ °æ·Î·Î ÀÌµ¿. ±Ùµ¥ home µğ·ºÅä¸®¿¡´Â banditÀÇ ·¹º§¿¡ ÇØ´çÇÏ´Â µğ·ºÅä¸®¸¸ Á¸Àç. 
-´Ù½Ã cd·Î bandit 0À¸·Î µ¹¾Æ¿È. ls -al·Î ÃÄº¸´Ï readme ÆÄÀÏÀÌ ÀÖ¾úÀ½.
-±×·ì ±ÇÇÑÀº ÀĞÀ» ¼ö ÀÖ¾ú°í ÇØ´ç ¾ÆÀÌµğ´Â bandit0 ±×·ì¿¡ ¼ÓÇØÀÖÀ¸¹Ç·Î ÀĞÀ» ¼ö ÀÖ¾úÀ½.
-cat readme ·Î ºñ¹øÀ» ÀĞÀ½.
+#Bandit Level 0 â†’ Level 1 í•´ê²°ë²•)
+í™ˆ ë””ë ‰í„°ë¦¬ì— ìˆëŠ” readmeì— ë¹„ë²ˆì´ ìˆë‹¤ê³  ëª…ì‹œ.
+pwdë¡œ í˜„ì¬ ê²½ë¡œ ì•Œì•„ëƒ„ -> /home/bandit0 ì— ìˆìŒ. ìƒìœ„ ë””ë ‰í† ë¦¬(home)ì— readmeê°€ ìˆë‹¤ê³  í–ˆìœ¼ë‹ˆ
+cd ../ë¡œ ìƒìœ„ ê²½ë¡œë¡œ ì´ë™. ê·¼ë° home ë””ë ‰í† ë¦¬ì—ëŠ” banditì˜ ë ˆë²¨ì— í•´ë‹¹í•˜ëŠ” ë””ë ‰í† ë¦¬ë§Œ ì¡´ì¬. 
+ë‹¤ì‹œ cdë¡œ bandit 0ìœ¼ë¡œ ëŒì•„ì˜´. ls -alë¡œ ì³ë³´ë‹ˆ readme íŒŒì¼ì´ ìˆì—ˆìŒ.
+ê·¸ë£¹ ê¶Œí•œì€ ì½ì„ ìˆ˜ ìˆì—ˆê³  í•´ë‹¹ ì•„ì´ë””ëŠ” bandit0 ê·¸ë£¹ì— ì†í•´ìˆìœ¼ë¯€ë¡œ ì½ì„ ìˆ˜ ìˆì—ˆìŒ.
+cat readme ë¡œ ë¹„ë²ˆì„ ì½ìŒ.
 
-´ä == boJ9jbbUNNfktd78OOpsqOltutMc3MY1
-
-
+ë‹µ == boJ9jbbUNNfktd78OOpsqOltutMc3MY1
 
 
 
@@ -49,7 +47,9 @@ cat readme ·Î ºñ¹øÀ» ÀĞÀ½.
 
 
 
-#Bandit Level 1 ¡æ Level 2
+
+
+#Bandit Level 1 â†’ Level 2
 Level Goal)
 -The password for the next level is stored in a file called - located in the home directory
 
@@ -57,23 +57,23 @@ Commands you may need to solve this level)
 -ls, cd, cat, file, du, find
 
 Helpful Reading Material)
--Google Search for ¡°dashed filename¡±
+-Google Search for â€œdashed filenameâ€
 -Advanced Bash-scripting Guide - Chapter 3 - Special Characters
 
-#Bandit Level 1 ¡æ Level 2 ÇØ°á¹ı)
-ls -al ·Î ÇØ´ç µğ·ºÅä¸® °Ë»ö.
-" - " ÆÄÀÏÀÌ ÀÖÀ½
-cat - À» ÇßÀ¸³ª ¿É¼ÇÀ» ¼³Á¤ÇÏ´Â ÁÙ¾Ë°í ´ë±â.
-cat ./-À» Çß´õ´Ï ÇØ°á. 
+#Bandit Level 1 â†’ Level 2 í•´ê²°ë²•)
+ls -al ë¡œ í•´ë‹¹ ë””ë ‰í† ë¦¬ ê²€ìƒ‰.
+" - " íŒŒì¼ì´ ìˆìŒ
+cat - ì„ í–ˆìœ¼ë‚˜ ì˜µì…˜ì„ ì„¤ì •í•˜ëŠ” ì¤„ì•Œê³  ëŒ€ê¸°.
+cat ./-ì„ í–ˆë”ë‹ˆ í•´ê²°. 
 
-´ä == CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
-
-
+ë‹µ == CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
 
 
 
 
-#Bandit Level 2 ¡æ Level 3
+
+
+#Bandit Level 2 â†’ Level 3
 Level Goal)
 -The password for the next level is stored in a file called spaces in this filename located in the home directory
 
@@ -81,48 +81,48 @@ Commands you may need to solve this level)
 -ls, cd, cat, file, du, find
 
 Helpful Reading Material)
--Google Search for ¡°spaces in filename¡±
+-Google Search for â€œspaces in filenameâ€
 
-#Bandit Level 2 ¡æ Level 3 ÇØ°á¹ı)
-°ø¹éÀ» ¾î¶»°Ô Ã³¸®ÇÒ °Å³Ä°¡ ÁßÁ¡.
-ls -al·Î È®ÀÎÇØº¸´Ï
-spaces in this filename ÀÌ ÀÖ¾úÀ½.
-cat "spaces in this filename" ÇÏ¸é ÇØ°á.
+#Bandit Level 2 â†’ Level 3 í•´ê²°ë²•)
+ê³µë°±ì„ ì–´ë–»ê²Œ ì²˜ë¦¬í•  ê±°ëƒê°€ ì¤‘ì .
+ls -alë¡œ í™•ì¸í•´ë³´ë‹ˆ
+spaces in this filename ì´ ìˆì—ˆìŒ.
+cat "spaces in this filename" í•˜ë©´ í•´ê²°.
 
-´ä == UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
-
-
+ë‹µ == UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 
 
-#Bandit Level 3 ¡æ Level 4
+
+
+#Bandit Level 3 â†’ Level 4
 Level Goal)
 -The password for the next level is stored in a hidden file in the inhere directory.
 
 Commands you may need to solve this level)
 -ls, cd, cat, file, du, find
 
-#Bandit Level 3 ¡æ Level 4ÇØ°á¹ı)
-¼ûÀº ÆÄÀÏ ¾î¶»°Ô ÀĞÀ» °ÍÀÌ³Ä°¡ ÁßÁ¡.
-±Ùµ¥ ½À°üÀûÀ¸·Î ls -al ÇÏ´Ï ±×³É ¼û°ÜÁø ÆÄÀÏµµ ³ª¿È...
-cd·Î µé¾î°¡¼­ catÀ¸·Î .hidden ÀĞÀ¸¸é ³¡.
+#Bandit Level 3 â†’ Level 4í•´ê²°ë²•)
+ìˆ¨ì€ íŒŒì¼ ì–´ë–»ê²Œ ì½ì„ ê²ƒì´ëƒê°€ ì¤‘ì .
+ê·¼ë° ìŠµê´€ì ìœ¼ë¡œ ls -al í•˜ë‹ˆ ê·¸ëƒ¥ ìˆ¨ê²¨ì§„ íŒŒì¼ë„ ë‚˜ì˜´...
+cdë¡œ ë“¤ì–´ê°€ì„œ catìœ¼ë¡œ .hidden ì½ìœ¼ë©´ ë.
 
-´ä == pIwrPrtPN36QITSp3EQaw936yaFoFgAB
-
-
+ë‹µ == pIwrPrtPN36QITSp3EQaw936yaFoFgAB
 
 
 
 
-#Bandit Level 4 ¡æ Level 5
+
+
+#Bandit Level 4 â†’ Level 5
 Level Goal)
--The password for the next level is stored in the only human-readable file in the inhere directory. Tip: if your terminal is messed up, try the ¡°reset¡± command.
+-The password for the next level is stored in the only human-readable file in the inhere directory. Tip: if your terminal is messed up, try the â€œresetâ€ command.
 
 Commands you may need to solve this level)
 -ls, cd, cat, file, du, find
 
 
-#Bandit Level 4 ¡æ Level 5 ÇØ°á¹ı)
-¼û°ÜÁø ÆÄÀÏ ¾È¿¡¼­ ÀĞÀ» ¼ö ÀÖ´Â ÅØ½ºÆ®¸¦ Ã£´Â cat ³ë°¡´Ù.
-'-'ÀÌ ÀÖ±â ¶§¹®¿¡ ÇöÀç°æ·Î¸¦ Ç¥½ÃÇØÁà¾ß ÇÔ. ¾È±×·¯¸é ¿É¼ÇÀÎ ÁÙ ¾Ë°í ¿¡·¯¶ä.
+#Bandit Level 4 â†’ Level 5 í•´ê²°ë²•)
+ìˆ¨ê²¨ì§„ íŒŒì¼ ì•ˆì—ì„œ ì½ì„ ìˆ˜ ìˆëŠ” í…ìŠ¤íŠ¸ë¥¼ ì°¾ëŠ” cat ë…¸ê°€ë‹¤.
+'-'ì´ ìˆê¸° ë•Œë¬¸ì— í˜„ì¬ê²½ë¡œë¥¼ í‘œì‹œí•´ì¤˜ì•¼ í•¨. ì•ˆê·¸ëŸ¬ë©´ ì˜µì…˜ì¸ ì¤„ ì•Œê³  ì—ëŸ¬ëœ¸.
 
-´ä == koReBOKuIDDepwhWk7jZC0RTdopnAYKh
+ë‹µ == koReBOKuIDDepwhWk7jZC0RTdopnAYKh
