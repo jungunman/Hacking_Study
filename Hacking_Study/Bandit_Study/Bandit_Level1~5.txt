@@ -107,3 +107,22 @@ Commands you may need to solve this level)
 cd로 들어가서 cat으로 .hidden 읽으면 끝.
 
 답 == pIwrPrtPN36QITSp3EQaw936yaFoFgAB
+
+
+
+
+
+
+#Bandit Level 4 → Level 5
+Level Goal)
+-The password for the next level is stored in the only human-readable file in the inhere directory. Tip: if your terminal is messed up, try the “reset” command.
+
+Commands you may need to solve this level)
+-ls, cd, cat, file, du, find
+
+
+#Bandit Level 4 → Level 5 해결법)
+숨겨진 파일 안에서 읽을 수 있는 텍스트를 찾는 cat 노가다.
+'-'이 있기 때문에 현재경로를 표시해줘야 함. 안그러면 옵션인 줄 알고 에러뜸.
+
+답 == koReBOKuIDDepwhWk7jZC0RTdopnAYKh
