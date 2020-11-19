@@ -40,3 +40,30 @@ cd ../로 상위 경로로 이동. 근데 home 디렉토리에는 bandit의 레벨에 해당하는 디렉�
 cat readme 로 비번을 읽음.
 
 답 == boJ9jbbUNNfktd78OOpsqOltutMc3MY1
+
+
+
+
+
+
+
+
+
+#Bandit Level 1 → Level 2
+Level Goal)
+-The password for the next level is stored in a file called - located in the home directory
+
+Commands you may need to solve this level)
+-ls, cd, cat, file, du, find
+
+Helpful Reading Material)
+-Google Search for “dashed filename”
+-Advanced Bash-scripting Guide - Chapter 3 - Special Characters
+
+#Bandit Level 1 → Level 2 해결법)
+ls -al 로 해당 디렉토리 검색.
+" - " 파일이 있음
+cat - 을 했으나 옵션을 설정하는 줄알고 대기.
+cat ./-을 했더니 해결. 
+
+답 == CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
