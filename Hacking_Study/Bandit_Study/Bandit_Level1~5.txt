@@ -90,3 +90,20 @@ spaces in this filename 이 있었음.
 cat "spaces in this filename" 하면 해결.
 
 답 == UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
+
+
+
+
+#Bandit Level 3 → Level 4
+Level Goal)
+-The password for the next level is stored in a hidden file in the inhere directory.
+
+Commands you may need to solve this level)
+-ls, cd, cat, file, du, find
+
+#Bandit Level 3 → Level 4해결법)
+숨은 파일 어떻게 읽을 것이냐가 중점.
+근데 습관적으로 ls -al 하니 그냥 숨겨진 파일도 나옴...
+cd로 들어가서 cat으로 .hidden 읽으면 끝.
+
+답 == pIwrPrtPN36QITSp3EQaw936yaFoFgAB
