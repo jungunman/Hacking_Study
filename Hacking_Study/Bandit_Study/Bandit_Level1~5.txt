@@ -67,3 +67,26 @@ cat - 을 했으나 옵션을 설정하는 줄알고 대기.
 cat ./-을 했더니 해결. 
 
 답 == CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
+
+
+
+
+
+
+#Bandit Level 2 → Level 3
+Level Goal)
+-The password for the next level is stored in a file called spaces in this filename located in the home directory
+
+Commands you may need to solve this level)
+-ls, cd, cat, file, du, find
+
+Helpful Reading Material)
+-Google Search for “spaces in filename”
+
+#Bandit Level 2 → Level 3 해결법)
+공백을 어떻게 처리할 거냐가 중점.
+ls -al로 확인해보니
+spaces in this filename 이 있었음.
+cat "spaces in this filename" 하면 해결.
+
+답 == UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
