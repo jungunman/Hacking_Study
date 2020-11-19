@@ -1,7 +1,9 @@
 # Bandit Level 0
 
 Level Goal)
--The goal of this level is for you to log into the game using SSH. The host to which you need to connect is bandit.labs.overthewire.org, on port 2220. The username is bandit0 and the password is bandit0. Once logged in, go to the Level 1 page to find out how to beat Level 1.
+-The goal of this level is for you to log into the game using SSH.
+The host to which you need to connect is bandit.labs.overthewire.org, on port 2220.
+The username is bandit0 and the password is bandit0. Once logged in, go to the Level 1 page to find out how to beat Level 1.
 
 Commands you may need to solve this level)
 -ssh
@@ -17,3 +19,24 @@ Port : 2220
 ID : bandit0
 pwd : bandit0
 그냥 단순히 ssh로 접근하는 방법을 알면 해결
+
+
+
+
+#Bandit Level 0 → Level 1
+Level Goal)
+-The password for the next level is stored in a file called readme located in the home directory. 
+Use this password to log into bandit1 using SSH. Whenever you find a password for a level, use SSH (on port 2220) to log into that level and continue the game.
+
+Commands you may need to solve this level)
+-ls, cd, cat, file, du, find
+
+#Bandit Level 0 → Level 1 해결법)
+홈 디렉터리에 있는 readme에 비번이 있다고 명시.
+pwd로 현재 경로 알아냄 -> /home/bandit0 에 있음. 상위 디렉토리(home)에 readme가 있다고 했으니
+cd ../로 상위 경로로 이동. 근데 home 디렉토리에는 bandit의 레벨에 해당하는 디렉토리만 존재. 
+다시 cd로 bandit 0으로 돌아옴. ls -al로 쳐보니 readme 파일이 있었음.
+그룹 권한은 읽을 수 있었고 해당 아이디는 bandit0 그룹에 속해있으므로 읽을 수 있었음.
+cat readme 로 비번을 읽음.
+
+답 == boJ9jbbUNNfktd78OOpsqOltutMc3MY1
