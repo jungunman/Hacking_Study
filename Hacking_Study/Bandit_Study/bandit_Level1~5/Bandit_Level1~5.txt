@@ -31,7 +31,7 @@ Use this password to log into bandit1 using SSH. Whenever you find a password fo
 Commands you may need to solve this level)
 -ls, cd, cat, file, du, find
 
-#Bandit Level 0 → Level 1 해결법)
+#Bandit Level 0 → Level 1 풀이 과정)
 홈 디렉터리에 있는 readme에 비번이 있다고 명시.
 pwd로 현재 경로 알아냄 -> /home/bandit0 에 있음. 상위 디렉토리(home)에 readme가 있다고 했으니
 cd ../로 상위 경로로 이동. 근데 home 디렉토리에는 bandit의 레벨에 해당하는 디렉토리만 존재. 
@@ -60,7 +60,7 @@ Helpful Reading Material)
 -Google Search for “dashed filename”
 -Advanced Bash-scripting Guide - Chapter 3 - Special Characters
 
-#Bandit Level 1 → Level 2 해결법)
+#Bandit Level 1 → Level 2 풀이 과정)
 ls -al 로 해당 디렉토리 검색.
 " - " 파일이 있음
 cat - 을 했으나 옵션을 설정하는 줄알고 대기.
@@ -83,7 +83,7 @@ Commands you may need to solve this level)
 Helpful Reading Material)
 -Google Search for “spaces in filename”
 
-#Bandit Level 2 → Level 3 해결법)
+#Bandit Level 2 → Level 3 풀이 과정)
 공백을 어떻게 처리할 거냐가 중점.
 ls -al로 확인해보니
 spaces in this filename 이 있었음.
@@ -121,7 +121,7 @@ Commands you may need to solve this level)
 -ls, cd, cat, file, du, find
 
 
-#Bandit Level 4 → Level 5 해결법)
+#Bandit Level 4 → Level 5 풀이 과정)
 숨겨진 파일 안에서 읽을 수 있는 텍스트를 찾는 cat 노가다.
 '-'이 있기 때문에 현재경로를 표시해줘야 함. 안그러면 옵션인 줄 알고 에러뜸.
 
