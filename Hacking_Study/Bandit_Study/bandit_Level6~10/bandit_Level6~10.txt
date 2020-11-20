@@ -91,3 +91,27 @@ sort data.txt | uniq -u
 하니 답이 잘 나옴.
 
 답 == UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
+
+
+
+
+
+
+
+
+#Bandit Level 9 → Level 10
+Level Goal)
+-The password for the next level is stored in the file data.txt in one of the few human-readable strings, preceded by several ‘=’ characters.
+
+Commands you may need to solve this level)
+-grep, sort, uniq, strings, base64, tr, tar, gzip, bzip2, xxd
+
+
+#Bandit Level 9 → Level 10 풀이 과정)
+cat을하면 알수 없는 값들이 좌르륵 나오나, strings 하면 잘 나온다.
+파일에서 출력 가능한 문자들을 보여주는 리눅스 명령어라고 한다.
+=이 반복되는 것 뒤에 나온다고 했으니 ===을 중점으로 찾았고, password is 이후에 답이 나왔다.
+
+
+
+답 == truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
