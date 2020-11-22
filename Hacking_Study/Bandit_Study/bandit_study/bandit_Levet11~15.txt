@@ -98,3 +98,40 @@ tar 파일음 -xvf 파일명을 해줘봤다.
 답 == 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
 
 
+
+
+
+
+
+
+
+
+
+
+#Bandit Level 13 → Level 14
+Level Goal)
+-The password for the next level is stored in /etc/bandit_pass/bandit14 and can only be read by user bandit14. For this level, you don’t get the next password, but you get a private SSH key that can be used to log into the next level. Note: localhost is a hostname that refers to the machine you are working on
+
+Commands you may need to solve this level)
+-ssh, telnet, nc, openssl, s_client, nmap
+
+Helpful Reading Material)
+-SSH/OpenSSH/Keys
+
+#Bandit Level 13 → Level 14 풀이 과정)
+ls -al 을 하면 홈디렉토리에 ssh암호키가 있다.
+이것을 해결하려면 힌트인 SSH/OpenSSH/Key를 어느정도 알아야했다.
+나는 RSA를 만들어 해결하려 했으나, 접근 권한이 없어 만들 수 없었기 때문에 곤란을 겪고 있었다.
+근데 ssh암호키가 있다는 것은 Key 기반 SSH 로그인이 가능하다는 소리일지도 모른다고 생각하고
+ssh의 옵션을 들여다 보았다.
+-i가  키파일 사용하는 것이란다.
+RSA의 암호화 키가 있다는 것은 이미 RSA를 생성했기 떄문이니, RSA를 만들필요가 없었다.
+
+ssh bandit14@localhost -i sshkey.private 이라고 암호키를 입력하고, 접속하겠냐는 말에 yes를 하니 잘 들어가졌다.
+그럼 이제, /etc/bandit_pass/bandit14에 가서 읽으면 되겠다.
+근데 cd로 이동하려고보니 안되더라, 까보니  bandit_pass가 디렉토리고 bandit14가 파일이었다.
+cd /etc/bandit_pass -> cat bandit14
+
+답 == 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+
+
