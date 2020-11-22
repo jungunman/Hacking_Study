@@ -53,3 +53,48 @@ The password is 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
 
 
 답 == 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
+
+
+
+
+
+
+
+#Bandit Level 12 → Level 13
+Level Goal)
+-The password for the next level is stored in the file data.txt, which is a hexdump of a file that has been repeatedly compressed. For this level it may be useful to create a directory under /tmp in which you can work using mkdir. For example: mkdir /tmp/myname123. Then copy the datafile using cp, and rename it using mv (read the manpages!)
+
+Commands you may need to solve this level)
+-grep, sort, uniq, strings, base64, tr, tar, gzip, bzip2, xxd, mkdir, cp, mv, file
+
+Helpful Reading Material)
+-Hex dump on Wikipedia
+
+#Bandit Level 12 → Level 13 풀이 과정)
+다소 복잡해진 감이 없지 않아 있다.
+dump를 보는 것도 복잡한데 디렉토리를 만들고 파일을 복사하고 이름을 바꾸는등 할게 많다. 그래도 시켰으니 한다.
+그리고나서 xxd를 이용해서 바이너리 파일로 만들고 그것을 저장하는 것에 애를 먹었다.
+계속해서 xxd -r data.txt를 했으나 저장이 되질 않아 어떻게 하면 좋을까 했는데,
+xxd -r data.txt data를 하니 data파일이 생성되었다.
+
+file을 이용하여 data파일을 보니 gzip 파일인 것을 확인. gzip은 gz라는 확장자를 가지고 있음을 알 수 있다.
+gzip -d data.gz를 압축 해제, 그랬더니 data파일 이나왔고 file data로 확인해보니 bzip2으로 압축된 것을
+확인할 수 있었다.
+
+그렇다면 bzip2는 확장자가 bz2이니 data.bz2로 이름을 변경해준다.
+그리고 bzip2 -d data.bz2를 하니 data파일이 또 나왔다.
+확인하니 gzip 그다음은 tar 파일.
+tar 파일음 -xvf 파일명을 해줘봤다.
+
+이것을 끝까지 반복해주다보면 답이 나온다.
+중요한 것은 file로 해당 파일의 정보를 보고 아 무슨 파일이구나를 알아챌 수 있어야하고, 확장자를 알아야 하며,
+그 해당 파일을 압축 푸는 옵션을 알아야한다.
+노가다긴 했지만 해당 파일을 푸는 과정이 나름 재밌었다.
+끝까지 풀어보니 The password is 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+가 나왔다.
+
+
+
+답 == 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+
+
