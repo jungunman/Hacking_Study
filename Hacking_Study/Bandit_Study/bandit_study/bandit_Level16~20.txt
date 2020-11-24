@@ -33,3 +33,52 @@ Protocol  : TLSv1.2
 같이 무엇을 사용하는지도 확인할 수 있었다.
 
 답 == cluFn7wTiGryunymYOu4RcffSxQluehd
+
+
+
+
+
+
+
+
+
+
+
+
+#Bandit Level 16 → Level 17
+Level Goal)
+-The credentials for the next level can be retrieved by submitting the password of the current level to a port on localhost in the range 31000 to 32000. First find out which of these ports have a server listening on them. Then find out which of those speak SSL and which don’t. There is only 1 server that will give the next credentials, the others will simply send back to you whatever you send to it.
+
+Commands you may need to solve this level)
+-ssh, telnet, nc, openssl, s_client, nmap
+
+Helpful Reading Material)
+-Port scanner on Wikipedia
+
+#Bandit Level 16 → Level 17 풀이 과정)
+개고생중에 개고생
+Port 범위로 줘서 맨처음
+nc -vz localhost 31000-32000으로 검색했더니 나온 것은 5개의 값. (nmap으로도 범위 스캔 가능)
+s_client로 접속해서 하나의 제대로 주는 값이 있었다.
+RSA private key 값이었는데 이것으로 ssh로 bandit17로 로그인하여 비밀번호를 찾으면 되겠구나 생각.
+근데, 권한이 문제였다.
+생성, 파일 수정, 이동 등 아무것도 할 수가 없어서 음 그럼 s_client에서 응답할 때 파일로 받아올 수 있나?
+생각해서 파일로 만드는법 찾다가 실패.
+결국 생각해낸건 tmp 파일 이용.
+거기서 생성하고 ssh로 로그인 했는데 privatekey 퍼미션 문제로 실패.
+퍼미션 주는 방법 찾아봄.
+chmod [값] [파일이름] 이었는데
+Read = 4 , Write = 2 , x(? 실행) = 1 한 행마다 +를 해서 user / group / Other에 값이 도출된다.
+4+2+1 / 4 / 0 
+rwxr----- 인것이다.
+chmod 740 파일이름.
+
+이렇게해서 권한도 설정해서 들어갔더니, ls -al 하니 패스워드 뭐시기가 있는데
+다하나씩 까보고 당황. ls -al하면 걍 비밀번호가 있을 줄 알았음.
+근데 전에 bandit_pass 경로에 비밀번호 모아뒀던 것 기억.
+find / -name bandit17* 2>/dev/null 을 입력하여 bandit17에 관련된 파일 다 불러옴.
+경로 여러개. 그중 bandit_pass 경로로 이동해서 찾음
+띠용~
+
+
+답 == xLYVMN9WE5zQ5vHacb0sZEVqbrp7nBTn
