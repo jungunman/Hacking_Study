@@ -1,0 +1,35 @@
+#Bandit Level 15 → Level 16
+Level Goal)
+-The password for the next level can be retrieved by submitting the password of the current level to port 30001 on localhost using SSL encryption.
+
+-Helpful note: Getting “HEARTBEATING” and “Read R BLOCK”? Use -ign_eof and read the “CONNECTED COMMANDS” section in the manpage. Next to ‘R’ and ‘Q’, the ‘B’ command also works in this version of that command…
+
+Commands you may need to solve this level)
+-ssh, telnet, nc, openssl, s_client, nmap
+
+Helpful Reading Material)
+-Secure Socket Layer/Transport Layer Security on Wikipedia
+-OpenSSL Cookbook - Testing with OpenSSL
+
+
+#Bandit Level 15 → Level 16 풀이 과정)
+nmap으로 localhost를 확인해보면 30001Port가 없는것을 확인할 수 있었다. 그럼 nc로 안되는 것인가?
+nc로 30001 Port에 15레벨의 비밀번호를 보냈으나 묵묵부답. 이건 아닌 것 같다.
+ssl암호화? 라는 말이 있어서 ls -al로 검색해봤더니 .bandit14.password 가 있었다. cat으로 읽어보니 bandit14의 비밀번호.
+이것을 암호화해서 보내란 건가? 지문은 15레벨의 비밀번호였다. 그래도 혹시 모르니 Openssl 암호화를 검색해서 암호화 시켜보려했으나
+권한 없음으로 막혔음. 이것도 아니구나.
+Openssl에 대하여 공부할 수 밖에 없었다. ssl은 쉽게 말해서 보안 통신을 위해 사용하는 프로토콜. openssl은 라이브러리중 하나.
+그럼 통신이 가능하다는 소리!
+검색해본 결과 s_client를 통해 접속할 수 있다고 한다.
+
+bandit15@bandit:~$ openssl s_client -connect localhost:30001
+
+해보니 뒤에 로딩이 뜨고 있다.
+무심코 엔터를 눌렀다가 password가 아니라고 올바른 것을 입력하라는 말을 들어가서 오 이거군 하고 현재비밀번호를 보내봤더니 bandit16의 비밀번호를 전달 받을 수 있었다.
+
+s_client가 운영중인 웹서버의 SSL인증서를 볼 수 있게 해준다고하는데, 입력하니 확실히 많은 줄이 나오고.
+SSL-Session:
+Protocol  : TLSv1.2
+같이 무엇을 사용하는지도 확인할 수 있었다.
+
+답 == cluFn7wTiGryunymYOu4RcffSxQluehd
