@@ -131,3 +131,34 @@ ssh -t bandit18@localhost cat ./readme 라고 입력하니
 그랬더니 명령수행하고 꺼졌다.
 
 답 == IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
+
+
+
+
+
+
+
+
+
+
+#Bandit Level 19 → Level 20
+Level Goal)
+-To gain access to the next level, you should use the setuid binary in the homedirectory. Execute it without arguments to find out how to use it. The password for this level can be found in the usual place (/etc/bandit_pass), after you have used the setuid binary.
+
+Helpful Reading Material)
+-setuid on Wikipedia
+
+#Bandit Level 19 → Level 20 풀이 과정)
+setuid 바이너리를 사용해야 한단다. bandit20-do 실행 후 uid와 gid,groups가 bandit19인것을 확인 euid가 bandit20 인것을 확인.
+setuid의 개념을 알아야 했다.
+개념은 이렇다 root권한 빌려서 잠깐 쓰고 다시 돌려주는 거.
+bandit20-do의 권한을 보면
+-rwsr-x--- (4750) 이었다.
+무심코 넘어갈뻔 했던게 x가 있어야 할 곳에 s 가 있더라. 이게 setuid를 뜻한다.
+
+근데 어쩌라고 심정이 강했는데 일단 실행하면 bandit20의 권한을 얻어올 수 있단 건 알았다.
+그렇게 조금 검색을 하다가, 음? 권한 얻어오면 실행시켜보면 될 거 아냐? 생각했고
+힌트에 /etc/bandit_pass에 가서
+/home/bandit19/bandit20-do cat ./bandit20을 출력시켰더나 답이 나왔다.
+
+답 == GbKksEFF4yrVs6il55v6gwY5aVje5f0j
