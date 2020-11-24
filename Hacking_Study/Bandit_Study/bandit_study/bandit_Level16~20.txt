@@ -107,3 +107,27 @@ diff 라이브러리를 이용하여 해결.
 
 답 == kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
 
+
+
+
+
+
+
+#Bandit Level 18 → Level 19
+Level Goal)
+-The password for the next level is stored in a file readme in the homedirectory. Unfortunately, someone has modified .bashrc to log you out when you log in with SSH.
+
+Commands you may need to solve this level)
+-ssh, ls, cat
+
+#Bandit Level 18 → Level 19 풀이 과정)
+홈디렉토리에 있는 readme를 읽으면 다음 레벨 비번이 적혀있단다.
+근데 .bashrc를 수정해서 튕기게 만들어서 정상적인 방법으론 확인이 어렵다.
+명령어를 보니 ssh가 있다.
+ssh -t를 이용하면 원격 로그인 및 명령을 내릴 수 있다고 한다.
+ssh -t bandit18@localhost cat ./readme 라고 입력하니
+비밀번호를 입력하라 한다.
+전에 알아낸 비밀번호가 있으니 입력.
+그랬더니 명령수행하고 꺼졌다.
+
+답 == IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
