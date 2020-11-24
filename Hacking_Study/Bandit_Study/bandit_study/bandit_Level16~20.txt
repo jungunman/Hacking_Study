@@ -82,3 +82,28 @@ find / -name bandit17* 2>/dev/null 을 입력하여 bandit17에 관련된 파일 다 불러옴.
 
 
 답 == xLYVMN9WE5zQ5vHacb0sZEVqbrp7nBTn
+
+
+
+
+
+
+
+#Bandit Level 17 → Level 18
+Level Goal)
+-There are 2 files in the homedirectory: passwords.old and passwords.new. The password for the next level is in passwords.new and is the only line that has been changed between passwords.old and passwords.new
+
+-NOTE: if you have solved this level and see ‘Byebye!’ when trying to log into bandit18, this is related to the next level, bandit19
+
+Commands you may need to solve this level)
+-cat, grep, ls, diff
+
+#Bandit Level 17 → Level 18 풀이 과정)
+전 파일과 후파일의 차이점을 찾으면 비밀번호를 찾을 수 있다.
+diff 라이브러리를 이용하여 해결.
+"diff 전파일이름 후파일이름" 하면 차이점을 알려준다.
+입력하면 로그인 가능.
+근데 byebye!하면서 튕김.
+
+답 == kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
+
