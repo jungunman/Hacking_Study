@@ -50,3 +50,64 @@ Password matches, sending next password
 
 
 
+
+
+
+#Bandit Level 21 → Level 22
+Level Goal)
+-A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what command is being executed.
+
+Commands you may need to solve this level)
+-cron, crontab, crontab(5) (use “man 5 crontab” to access this)
+
+#Bandit Level 21 → Level 22 풀이 과정)
+
+cron이라는 새로운 명령어가 나왔다.
+cron을 검색해서 알아보았다.
+쉽게 말하면 실행 프로그램을 특정 시간에(특정 시간마다) 백그라운드에서 자동으로 수행하게 해주는 명령어다.
+Cron Process는 /etc/crontab 파일에 설정된 것을 읽어서 수행한단다.
+crontab = cron 작업을 설정하는 파일.
+/etc/crontab의 형식은 7가지의 필드로 이루어져 잇다.
+분 시 일 월 요일 사용자 실행명령
+****** user <command to be executed>
+crontab은 수행내역이 담긴 파일위치를 참고한다.
+/var/spool/cron
+/etc/cron.d
+/etc/crontab
+
+ls -al을 했으나 특별한 건 없다.
+지문에는 cron.d를 확인해보라고 했으니 넘어갔다.
+그랬더니 cronjob_*이라고 적혀진 파일들이 많았다.
+권한을 보면 -rw-r--r--이었다. user와 group은 root였지만 other도 읽을 순 있기에 cat으로 읽었다.
+cat ./cronjob_bandit22
+@reboot bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+* * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+* * * * * bandit22 매분 bandit22라는 유저가 /usr/bin/cronjob_bandit22.sh에 있는 명령어를 실행하고 있다.
+@reboot음.. 리부팅 할때마다 실행해주고 있다.
+라고 해석했다.
+그렇다면 일단 저곳으로 가보자
+cd ./usr/bin -> cronjob_bandit22.sh
+
+가서 ls -al을 했더니 너무 많은 파일들이 나와서 ls -l cronjob_bandit22.sh으로 파일이 있는지 확인해주었고
+있었다.
+
+권한은 -rwxr-x--- 유저는 bandit22 그룹은 bandit21!
+그룹은 읽을수도 실행시킬수도있었다.
+일단 읽어봤다.
+cat ./cronjob_bandit22.sh
+출력된 내용물은 아래와 같다.
+#!/bin/bash
+chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+/tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv에
+chmod는 권한이고 644, user는 읽고 쓰기 가능 실행불가, 그룹과 그외는 읽기만 가능한 커미션을 주었단다.
+그리고 밑에 cat 명령어를 보면
+cat file1 > file2 일 경우
+파일 복사를 이루어지는데, 그니까 해석해보면 
+cat으로 bandit22의 비밀번호를 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv 에 복사해놨고, 읽을 수 있도록 했다.
+cat으로 절대 경로를 입력하니 답이 나왔다.
+
+
+답 == Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
