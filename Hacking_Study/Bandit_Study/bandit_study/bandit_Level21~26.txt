@@ -111,3 +111,69 @@ cat으로 절대 경로를 입력하니 답이 나왔다.
 
 
 답 == Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
+
+
+
+
+
+
+
+
+
+
+#Bandit Level 22 → Level 23
+Level Goal)
+-A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what command is being executed.
+
+-NOTE: Looking at shell scripts written by other people is a very useful skill. The script for this level is intentionally made easy to read. If you are having problems understanding what it does, try executing it to see the debug information it prints.
+
+Commands you may need to solve this level)
+-cron, crontab, crontab(5) (use “man 5 crontab” to access this)
+
+
+#Bandit Level 22 → Level 23 풀이 과정)
+전과 같이 /etc/cron.d 디렉토리에가서 ls -l 로 검색해주면
+cronjob_bandit23이 있는 것을 확인할 수 있었다. 읽을 권한이 있으니 읽는다.
+cat ./cronjob_bandit23
+읽은 결과->
+@reboot bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+* * * * * bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+bandit22와 다를게 없어보인다.
+
+그렇다면 해당 디렉토리로 넘어가서 읽어보자 (여기선 절대경로로 읽은 것으로 간주)
+cat /usr/bin/cronjob_bandit23.sh
+읽은 결과 ->
+#!/bin/bash
+
+myname=$(whoami)
+mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+
+echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+
+cat /etc/bandit_pass/$myname > /tmp/$mytarget
+
+설명서다.
+myname = whoami로 간단하게 자신이 누구인지 적으면 되는거고.
+mytarget = echo I am user $myname | md5sum | cut -d ' ' -f 1로 자신의 값을 넣어주면 된다고 한다.
+일단 나는 md5sum과 cut 명령어를 모르기에 검색해봤다.
+md5sum = 지정된 파일을 md5라는 해시 알고리즘으로 값을 체크섬 값을 계산하는 명령어란다. 입력된 파일을 30자 정도의 문자로 축약한 값을 알려준다고 한다.
+cut = 파일 내용을 각 필드로 구분하고 필드별로 내용을 추출하며, 필드들을 구분자로 구분할 수 있는 명령어! option -d 는 필드를 구분하는 문자를 지정하는 것이라고 -f는 잘라낼 필드를 말한다.
+
+그러니까 저 echo 명령어로 출력한 " i am user $myname" 을 md5sum으로 변경하고 cut으로 다듬는다고 간단하게 생각하기로 했다.
+
+자 그럼, 
+whoami= bandit22
+mytarget = 8169b67bd894ddbb4412f91573b38db3 (echo I am user bandit22 | md5sum | cut -d ' ' -f 1로 나온 값)
+cat /etc/bandit_pass/bandit22 > /tmp/8169b67bd894ddbb4412f91573b38db3 하고
+읽어봤더니, bandit22의 비밀번호가 나왔다.
+엥?
+아. bandit23을 얻어내려면 mytarget을 "echo I am user bandit23 | md5sum | cut -d ' ' -f 1" 으로 했어야했다.
+다시,cat /etc/bandit_pass/bandit22 > /tmp/8ca319486bfbbc3663ea0fbe81326349 로 했더니 권한이 없다고한다.
+그렇다면 안에 파일이 있을터.
+cat으로 열어봤더니 답이 나왔다.
+ls -l 로 해당파일을 열어보니
+-rw-r--r-- 권한, user= bandit23, group=root인 8ca319486bfbbc3663ea0fbe81326349 ASCII text파일이 있었다.
+
+
+
+답 ==jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
