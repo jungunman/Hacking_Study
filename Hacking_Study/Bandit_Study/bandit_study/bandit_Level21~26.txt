@@ -1,0 +1,52 @@
+#Bandit Level 20 → Level 21
+Level Goal)
+-There is a setuid binary in the homedirectory that does the following: it makes a connection to localhost on the port you specify as a commandline argument. It then reads a line of text from the connection and compares it to the password in the previous level (bandit20). If the password is correct, it will transmit the password for the next level (bandit21).
+
+-NOTE: Try connecting to your own network daemon to see if it works as you think
+
+Commands you may need to solve this level)
+-ssh, nc, cat, bash, screen, tmux, Unix ‘job control’ (bg, fg, jobs, &, CTRL-Z, …)
+
+
+#Bandit Level 20 → Level 21 풀이과정)
+ls -al을 하면 suconnect라는 setuid의 파일이 있는데 권한을 보면 -rwsr-x---였다.
+실행하니
+Usage: ./suconnect <portnumber>
+This program will connect to the given port on localhost using TCP. If it receives the correct password from the other side, the next password is transmitted back.
+라는 사용법과 함께 친절히 설명도 있었다.
+TCP를 사용해서 localhost에 지정된 포트에 연결해주는 프로그램. 상대방으로부터 올바른 비밀번호를 받으면 다음 비밀번호를 돌려준단다.
+여기서 막혔다. 그래서 현시점에서 필요한 명령어들을 싹다 검색했다.
+bash - 리눅스 Shell, 사용자의 명령을 해석하고 커널에 명령을 요청해주는 역할
+screen, tmux - 화면 분할.
+    Session: 여러 윈도우로 구성,
+    Window : 터미널 화면, 세션 내에서 탭처럼 사용 가능, 
+    Pane : 하나의 윈도우내에서 화면 분할
+등 여기서 나는 tmux를 사용했다.
+
+일단 명령어들을 하나씩 살펴보면, 서버를 2개 이용해야하는 것처럼 화면을 나눈다.
+그래서 나는 tmux의 pane를 이용하여 화면분할로 게임을 이어갔다.
+nc가 있다. 일단 서버에 전송하거나 받는 것은 확실하니, nc를 사용한다.
+nmap을 사용하여 localhost의 열려있는 서버를 확인했다.
+nmap localhost -> 3개의 서버가 열려있었다.
+포트가 겹치면 안되기에 나는 nc -l 228을 사용하여 listen모드로 서버를 받게 했다.
+그리고 ./suconnect 228 로 접속을 했으나, connect 불가.
+왜인가 싶으니, nmap localhost -p 228 를 검색해보니 닫혀있었다.
+그래서 다시 nc -lp 228 로 열려고했다. 그러나, 실패.
+권한이 없단다.
+권한이 문제일 이유가 있나? 싶어서 검색 및 질문을 했더니, 포트가 낮은 경우 서비스를 하고 있는 경우가 있어 잘못쓰게 막아둔다고 한다.
+그래서 8080으로 포트를 변경.
+nc -lp 8080으로 하고  nmap으로 확인하니 잘열려있다.
+./suconnect 파일도 잘 열리고, 여기서 입력하라고 대기하고 있는데. ./suconnect 실행한 곳에서 비밀번호를 건내주니 반응이 없었다.
+nc에서 bandit20 비밀번호를 보내니 ./suconnect 부분에서
+Read: GbKksEFF4yrVs6il55v6gwY5aVje5f0j                                           
+Password matches, sending next password
+라고 오며, nc 서버에서 다음 패스워드가 돌아왔다.
+
+
+
+답 == gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr
+
+
+
+
+
