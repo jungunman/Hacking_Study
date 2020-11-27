@@ -70,3 +70,22 @@ bandit26은 이렇게 진행해야할 것 같다.
 
 
 
+
+
+#Bandit Level 26 → Level 27
+Level Goal)
+-Good job getting a shell! Now hurry and grab the password for bandit27!
+
+Commands you may need to solve this level)
+-ls
+
+#Bandit Level 26 → Level 27 풀이 과정)
+거저먹는 과정. ls 로 -do 파일을 실행시켜 권한을 얻어 cat으로 bandit27 비밀번호 불러오면 됌.
+아마, 귀찮게 bandit26 vi로 로그인해가며 하지말고 걍 넘어가란 뜻으로 보임.
+
+답 == 3ba3118a22e93127a4ed485be72ef5ea
+
+
+
+
+
