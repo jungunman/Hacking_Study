@@ -89,3 +89,29 @@ Commands you may need to solve this level)
 
 
 
+
+
+
+#Bandit Level 27 → Level 28
+Level Goal)
+-There is a git repository at ssh://bandit27-git@localhost/home/bandit27-git/repo. The password for the user bandit27-git is the same as for the user bandit27.
+
+-Clone the repository and find the password for the next level.
+
+Commands you may need to solve this level)
+-git
+
+#Bandit Level 27 → Level 28 풀이 과정)
+git의 명령어로 git의 사용방법을 알아야 풀 수 있는 과제였다.
+깃을 사용하곤 있지만 linux에서는 사용해보지 않은 바, 명령어를 찾아봤다.
+일단 repo를 복제해야하니 내게 권한이 있는 /tmp/27 디렉을 만들어 진행했다.
+
+git clone ssh://bandit27-git@localhost/home/bandit27-git/repo ->
+접속할꺼냐고 물어본다.
+yes, 비밀번호는 bandit27과 같다고 지문이 알려주니 bandit27 패스워드 입력.
+쭈르륵 결과가 뜨고,
+ls -al을 해보니 repo 폴더가 생겼다. 권한은 -drwxr-sr-x 그룹에 setGID가 걸려있는것이 보인다.
+들어가봤더니 README 가 있고, 읽으니 다음 레벨의 비번이 나왔다.
+여기서는 외부 git을 복제하는 법 같다.
+
+답 == 0ef186ac70e04ea33b4c1853d2526fa2
