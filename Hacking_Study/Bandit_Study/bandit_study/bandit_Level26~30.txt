@@ -1,0 +1,72 @@
+#Bandit Level 25 → Level 26
+Level Goal)
+-Logging in to bandit26 from bandit25 should be fairly easy… The shell for user bandit26 is not /bin/bash, but something else. 
+Find out what it is, how it works and how to break out of it.
+
+Commands you may need to solve this level)
+-ssh, cat, more, vi, ls, id, pwd
+
+
+#Bandit Level 25 → Level 26 풀이 과정 ) 
+맨처음 sshkey파일이 있다. 그렇다면 ssh로 26으로 쉽게 접속할 수 있을거라고 판단.
+ssh -i bandit26.sshkey bandit26@localhost를 입력하자
+로그인 후에 바로 로그아웃.
+그렇다면 예전에 풀었던 문제 베쉬가 실행되기전 명령어를 입력하여 가져오는 것도 가능하지 않을까?
+싶어서 입력해봤다.
+
+ssh -i bandit26.sshkey bandit26@localhost | cat /etc/bandit_pass/bandit26 
+실패. 정상적으로 로그인이 되질 않는다. 그래서 순서를 바꿨다.
+cat /etc/bandit_pass/bandit26 | ssh -i bandit26.sshkey bandit26@localhost 
+그랬더니 정상적으로 로그인되나 여전히 바로 꺼졌다.
+그러나, 다른 점이 있었다.
+::::::::::::::
+/home/bandit26/text.txt
+::::::::::::::
+이라는 단어가 출력됐다.
+한번 가서 확인해봤다.
+혹시나 싶어서 가서 권한을 봤더니, 아무 권한이 없다.
+bash가 아니라는데... 음... 어떻게 확인하더라? 하고 bash 관련 정보를 찾다가
+/etc/passwd 파일에서 확인할 수 있다고 한다. 바로 확인했다.
+26의 쉘은 /usr/bin/showtext다. 이름부터 showtext인것을 보니 가보자.
+cd /usr/bin , ls -l showtext 하니 권한이 -rwxr-xr-x 였다. 음... 실행도 가능하네
+실행도 해보고 cat으로도 읽어보았다.
+실행했을 땐
+more: stat of /home/bandit25/text.txt failed: No such file or directory
+이라는 단어가
+cat으로 읽었을 땐
+#!/bin/sh
+
+export TERM=linux
+
+more ~/text.txt
+exit 0
+라는 설명이 나왔다.
+
+exit 0 이 탈출 코드고 그전에 more ~/text.txt를 실행하는 것을 볼 수 있었다.
+그렇다면 화면을 줄이고 접속을하면 more이 실행한다고 분석할 수 있었다.
+화면을 최소화하고
+ssh -i bandit26.sshkey bandit26@localhost 하니
+more이 실행되었다! more 명령어를 살펴보면 v를 누르면 vi를 실행할 수 있다.
+그리고 vi에는 ex명령어 모드가 있는데 이것을 사용해서 값을 불러올 수 있다.
+일단 권한을 확인해야하니 esc + !whoami 를 하면 누구 권한인지 나온다.
+vi에서 bandit26 임을 확인했다.
+그럼 이제 ex명령어를 이용해서 비밀번호를 확인하면 된다.
+:r /경로 는 해당 줄에 파일을 읽어오는 것이라고 명시되어있다.
+:r /etc/bandit_pass/bandit26 ->
+하니 비밀번호를 가져왔다. 그걸로 bandit26에 접속하니 여전히 접속이 끊어졌다.
+/etc/passwd 에 보면 showtext 이니까 이걸 바꿔줘야겠다.
+다시 bandit26을 접속해서 vi로 해당 쉘의 권한을 바꿔준다
+:set shell?을 하면 지금 쉘이나오고
+:set shell=/bin/bash 하면 해당 쉘로 변하는데, 영구적으로 변하는 것이 아니였다.
+vi에서 :sh 또는 :shell 이라고 하면 해당 쉘로 접속한다. 쉘을 해제하고 싶으면 exit를 통해서 나갈 수있고 그럼 vi로 돌아온다.
+chsh로 /bin/bash로 바꾸려고 했으나 패스워드 인증실패로 바꿀수 없었다.
+
+bandit26은 이렇게 진행해야할 것 같다.
+
+
+
+답 == 5czgV9L3Xx8JPOyRbXh6lQbmIOWvPT6Z
+
+
+
+
