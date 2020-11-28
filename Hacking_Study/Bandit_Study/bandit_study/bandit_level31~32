@@ -1,0 +1,21 @@
+#Bandit Level 30 → Level 31 풀이 과정)
+위에 복사는 과정까지는 모두 같다. 이번에 READMD.md 는 빈 파일이었다.
+branch도 확인해보니 하나뿐이었다.
+로그도 뒤져보고 branch도 뒤져봤다. 그러다가 아까 봤던 packed-refs파일을 열어보니
+
+# pack-refs with: peeled fully-peeled 
+3aefa229469b7ba1cc08203e5d8fa299354c496b refs/remotes/origin/master
+f17132340e8ee6c159e0a4a6bc6f80e1da3b1aea refs/tags/secret
+
+밑에 refs/tags/secret 가 나왔다. 이름이 비밀이어서 숨겨진 브랜치인가? 생각해 tree에서 checkout 해봤으나 아니었다.
+뭐지? 생각하다가 git tag명령어를 쳐봤더니 있었다. 
+git에서 태그를 사용하는 이유는
+운영 및 배포에서 매우 편리하게 사용할 수 있기 때문이고, 태그명을 배포버전으로 정하고 간략한 정보를 함께 저장하면 , 태그를 사용해 원하는 태그로 돌아갈 수 있는 효과가 있기 때문이다.
+라고 이해했다.
+오케이, 그럼 저 태그를 까봐야겠구나. 
+git tag로 태그를 확인했더니 secret이 있다.
+git show secret으로 읽었더니 답이 나왔다.
+나중에 알게 된 사실이지만 git은 SHA 값을 찾을 때 먼저 refs에서 찾고 없으면 packed-refs 파일을 조회한다고한다.
+
+
+답 == 47e603bb428404d265f59c42920d81e5
