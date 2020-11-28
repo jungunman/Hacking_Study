@@ -19,3 +19,37 @@ git show secret으로 읽었더니 답이 나왔다.
 
 
 답 == 47e603bb428404d265f59c42920d81e5
+
+
+
+
+#Bandit Level 31 → Level 32
+Level Goal)
+-There is a git repository at ssh://bandit31-git@localhost/home/bandit31-git/repo. The password for the user bandit31-git is the same as for the user bandit31.
+
+-Clone the repository and find the password for the next level.
+
+Commands you may need to solve this level)
+-git
+
+#Bandit Level 31 → Level 32 풀이 과정)
+복사과정은 똑같다. README.md 를 읽어보면
+ This time your task is to push a file to the remote repository.
+
+Details:
+    File name: key.txt
+    Content: 'May I come in?'
+    Branch: master
+
+이란 내용이 나오는데. 저것을 추가하고 보내면 된다.
+Visual studio로 깃헙에 올리는 과정을 보면 파일을 추가하고 작성한다음 변경 내용을 적고 동기화 하여 push 하는 과정이 있다.
+vi key.txt ->
+May I come in?
+git add key.txt
+하면 오류가 뜨는데 .gitignore 파일 때문이다. vi로 수정해서 해당 텍스트 파일을 거부할 수 없게 만들던가 
+git add key.txt -f 를 해서 무시하던가 둘중 하나를 택하면 좋다.
+하고 난뒤 git commit -m "May I come in?" 했다. m으로 메세지를 저장할 수 있다고 해서 혹시 몰라 저장했다.
+변경사항까지 간단하게 메모 했겠다 이제 push만 하면 정상 업로드가 가능하다.
+그럼 답이 돌아온다.
+
+답 == 56a9bf19c63d650ce78e6ec0354ee45e
