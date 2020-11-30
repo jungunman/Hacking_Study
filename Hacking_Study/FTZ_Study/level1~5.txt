@@ -153,3 +153,24 @@ finger level5@localhost
 하면 답이 반환된다.
 
 답 == what is your name?
+
+
+
+
+
+#================================================================================#
+#FTZ Level 5
+hint) 
+level5.tmp 라는 이름의 임시파일을 생성한다.
+이를 이용하여 level6의 권한을 얻어라.
+
+
+#FTZ Level 5 풀이 과정)
+힌트를 보고 임시파일이라 했으니 touch /tmp/level5.tmp 라는 파일을 만들어 줬다.
+그 다음 find / -user level6 2>/dev/null 이라 검색하면 
+/usr/bin 에 /leve5 라는 setuid 파일이 있다.
+실행하면 level5.tmp 에 비밀번호를 만들어준다.
+음... 너무 쉬운 문제라 막힘이 없었다.
+
+
+답 == what the hell
