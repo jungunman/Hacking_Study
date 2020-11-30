@@ -1,0 +1,24 @@
+
+#FTZ Level 1
+hint) -Level2 권한에 setuid가 걸린 파일을 찾는다.
+
+#FTZ Level 1 풀이 과정)
+ls -al ->
+여러 숨겨진 파일과 일반 파일중에 hint를 읽으면 위와 같은 힌트를 얻을 수 있다.
+find 를 이용해 찾으란 소리같다.
+find 명령어를 기억해보면 다양한 조건으로 검색할 수 있는데 그중 user와 perm 옵션이 적당해보인다
+id level2 ->
+uid=3002(level2) gid=3002(level2) groups=3002(level2)
+3002 숫자의 아이디를 가지고 있으니, 그것으로 검색해보자.
+find / -perm -4000 -user 3002 2> /dev/null ->
+/bin/ExecuteMe
+가서 실행해보니 level2의 실행으로 하나의 명령만 실행시켜주겠다는 스크립트가 시작된다.
+my-pass 와 chmod를 쓸 수 없다고 명시하는 것보니, 곤란했다.
+/etc/passwd 는 읽을 수있어도 비밀번호는 x로 저장되고 실제 비밀번호는 encoding 되서 /etc/shadow에 저장되는 것을 알고 있다.
+/etc/shadow는 root 권한만 읽을 수 있으니, level2 의 권한을 얻는다 해도 볼 수 없다.
+계속 실행시켜가며 level2의 홈디렉토리 및 find로 level2 관련 파일들을 찾으려고 했으나 없었다.
+그러다 shell Script 라면 첫번째 명령에 $0 = /bin/bash가 들어가있지 않나 추측.
+$0을 삽입하니, my-pass 명령어가 먹혔다. 답 나왔다.
+
+
+답 == hacker or cracker
