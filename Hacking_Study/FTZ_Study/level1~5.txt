@@ -46,3 +46,64 @@ setuid가 걸린 파일이었다. 실행권한이 있어 실행시켰더니 vim이 켜진다!!!
 
 
 답 == can you fly?
+
+
+
+
+
+#================================================================================#
+#FTZ Level 3
+hint) 다음 코드는 autodig의 소스이다.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+ 
+int main(int argc, char **argv){ 
+ 
+    char cmd[100];
+ 
+    if( argc!=2 ){
+        printf( "Auto Digger Version 0.9\n" );
+        printf( "Usage : %s host\n", argv[0] );
+        exit(0);
+    }
+ 
+    strcpy( cmd, "dig @" );
+    strcat( cmd, argv[1] );
+    strcat( cmd, " version.bind chaos txt");
+ 
+    system( cmd );
+ 
+}
+
+이를 이용하여 level4의 권한을 얻어라.
+
+more hints.
+- 동시에 여러 명령어를 사용하려면?
+- 문자열 형태로 명령어를 전달하려면?
+
+###########################################################
+
+#FTZ Level 3 풀이 과정)
+당황스럽게도 c언어 코드가 나왔다. 
+stdio.h = C 언어의 표준 라이브러리 함수의 매크로 정의, 상수, 여러 형의 입출력 함수가 포함된 헤더 파일. (표준 입출력 라이브러리-standard input output libary)
+stdlib.h = C 언어의 표준 라이브러리로, 문자열 변환, 사 난수 생성, 동적 메모리 관리 등의 함수들을 포함한다.
+unistd.h = 유닉스에서 사용하는 C 컴파일러 헤더파일, window에서는 사용하지 않음.
+
+라는 정보를 찾을 수 있었고, 이제 위의 코드를 이용하여 권한을 얻으라 했으니 사용한 함수에 대해 정보를 조사해야했다.
+strcpy = String copy로 보인다. 찾아보니 맞다. 문자열을 복사하는 함수다.
+         strcpy(대상문자열 , 원본 문자열) return *대상문자열
+
+strcat = String Concatanate, 문자열을 붙이는 함수!
+         strcat(최종문자열, 붙일 문자열) return *최종문자열
+
+system = 명령어를 수행하는 함수.
+
+dig = Domain Information Groper의 약자, 네임서버로부터 정보를 가져오는 툴.
+
+그래서 코드를 확인해보면 argv[1]인자를 우리가 넣어줘야한다. /tmp/3이라는 디렉토리를 만들어서 vi a.c -> gcc a.c 후 ./a.out "ip;whoami;" 라고 진행했으나, 실패.
+find로 -user level4 로 검색해보니 autodig가 있었다... 뻘쭘
+해당 디렉토리로 이동후 ./autodig "ip;my-pass" 하니까 비밀번호가 나왔다.
+
+답 == suck my brain
