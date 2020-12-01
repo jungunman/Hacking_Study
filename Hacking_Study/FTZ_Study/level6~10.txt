@@ -49,3 +49,48 @@ mate 가 나오고 입력하니 다음 비밀번호가 나왔다.
 
 
 #================================================================================#
+
+#FTZ Level 8
+hint) level9의 shadow 파일이 서버 어딘가에 숨어있다.
+그 파일에 대해 알려진 것은 용량이 "2700"이라는 것 뿐이다.
+
+
+#FTZ Level 8 풀이 과정)
+그나마 좀 친절한 것 같다. find로 사이즈를 찾으면 될 것 같다.
+find 명령어를 찾아서 size 값으로 검색하는 법을 찾아보니 사이즈 단위로 찾을 수 있었다.
+사이즈 단위가 나오는데
+b : 블록
+c : byte
+k : kbyte
+w : 2byte
+다. 보통 파일 크기를 byte단위로 부르니 byte로 찾았다.
+find / -size 2700c 2>/dev/null ->
+/var/www/manual/ssl/ssl_intro_fig2.gif
+/etc/rc.d/found.txt
+/usr/share/man/man3/IO::Pipe.3pm.gz
+/usr/share/man/man3/URI::data.3pm.gz
+값들이 나왔다. found.txt가 내가 찾는 파일처럼 이름이 지어져있다.
+가서 열어보니
+level9의 shadow파일이 있었다. 오... 암호화가 잘되어있으니, 복호화 하는 방법을 구글에 검색하다가
+john the ripper 라는 툴을 찾을 수 있었다.
+
+설치하는 법도 참고하여 설치 했다.
+설치 과정을 설명하겠다. 
+https://www.openwall.com/john/ 에서 툴의 링크를 복사한다 (https://www.openwall.com/john/k/john-1.9.0.tar.gz).
+mkdir /tmp/8 로 8이란 임시 디렉토리를 만들어 그곳에서 wget 링크로 다운받았다.
+gzip으로 압축되어있으니
+gzip -d 파일명
+으로 풀고 tar은 
+tar -xvf 파일명으로 풀면 된다.
+잘 풀린다면 src 파일이 있을텐데 그곳에서 make로 명령해서 지원 가능한 시스템을 검색.
+나는 make linux-x86-64로 했다. 자신의 호환에 맞는 시스템을 만들어야 한다. (여기서 make 명령어를 간단하게 설명하면, makefile이라는 파일을 참조하여 [빌드]하는 명령어다.)
+그리고 run 디렉토리로 이동한 후, john을 실행해서 보면 된다.
+./john /etc/rc.d/found.txt ->
+Loaded 36 password hashes with no different salts (md5crypt [MD5 32/64 X2])
+No password hashes left to crack (see FAQ)
+라고 뜨는데, md5crypt로 암호화 한것 같다.
+./john -show /etc/rc.d/found.txt ->
+level9:apple:11040:0:99999:7:-1:-1:134549524
+비밀번호 위치에 apple 이라는 비밀번호가 나왔다.
+
+답 == apple
