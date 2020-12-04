@@ -53,7 +53,18 @@ int main(int argc, char *argv[]) {
 }
 ```
 
+## EGGSHELL 정확한 주소 알아오는 코드
 
+'''c
+#include <stdio.h>
+
+int main()
+{
+	printf("Addr = %p\n",getenv("EGG"));
+
+	return 0;
+}
+''''
 
 > 자료 출처
-> _[자료 출처](https://blog.dork94.com/99?category=749219 "EGGSHELL을 이용한 BOF하기, EGGSHELL 설명")_
+> _[FTZ LEVEL 11 EGGSHELL 이용하기 참고 문서](https://blog.dork94.com/99?category=749219 "EGGSHELL을 이용한 BOF하기, EGGSHELL 설명")_
