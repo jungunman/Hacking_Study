@@ -21,7 +21,7 @@ Struct 모듈의 사용법을 적용한 후 디버깅을 진행했다.<br>
 디버깅으로 값을 잘 계산하는 지 확인했다.<br>
 ![잘더해짐](./imgs/level0/2.PNG)<br>
 잘 더해졌으니, Send로 보내면 된다. 값을 계산할 때 빅 엔디언 형식으로 바꿨으니 리틀 엔디언 형식으로 바꾼 후 보내줘야한다.<br>
-그랬더니 답이 돌아왔다.
+그랬더니 답이 돌아왔다.<br>
 ![답](./imgs/level0/3.PNG)<br>
 
 ```python
@@ -62,7 +62,7 @@ client_socket.close()
 Struct 객체가 헷갈릴 수 있기에 잠시 설명한다.<br>
 Struct 객체에서 받을 때와 보낼 때 모두 Little Endian으로 사용하는 모습이 보인다.<br>
 ``` python
-big = struct.unpack('<I', data)[0] #받을 때 리틀 엔디언 변환
+big = struct.unpack('<I', data)[0] #받을 때 리틀 엔디언에서 빅 엔디언으로 변환
 
 client_socket.send(struct.pack('<I',result)) # 보낼 때 리틀 엔디언 변환
 ```
@@ -88,8 +88,8 @@ bUP = struct.unpack(">I",bP)[0]
 print("Little Endian : "+str(lUP)+"\nBig Endian : "+str(bUP))
 
 ```
-실행 결과는 이렇다.
+실행 결과는 이렇다.<br>
 
-![struct_Little_Endian](./imgs/level0/4.png)
+![struct_Little_Endian](./imgs/level0/4.PNG)<br>
 
 #### 답 == _Username: vortex1 Password: Gq#qu3bF3_ 
