@@ -11,18 +11,18 @@ Intel x86Àº ¸®Æ² ¿£µð¾È ¹æ½ÄÀ» »ç¿ëÇÏ¸ç, ¸®Æ² ¿£µð¾ð ¹æ½ÄÀº ¸Þ¸ð¸®ÀÇ Ã¹ ÁÖ¼Ò¿¡ Ç
 ½±°Ô »ý°¢ÇÏ¸é ¹Þ¾Æ¿À´Â °ªÀ» Big endianÀ¸·Î º¯È¯ÇÏ°í, °è»ê ÈÄ¿¡ ´Ù½Ã Little Endian ¹æ½ÄÀ¸·Î º¸³»ÁÖ¸é µÈ´Ù.<br><br>
 
 ÀÏ´Ü ¼ÒÄÏ ÇÁ·Î±×·¡¹ÖÀ» ÇÑ ÈÄ¿¡ ¾î¶² µ¥ÀÌÅÍ¸¦ ¹Þ¾Æ¿À´Â Áö È®ÀÎÇß´Ù.(ºÎÈ£ ¾ø´Â "Á¤¼ö"ÀÌ±â¿¡ 4¹ÙÀÌÆ®¸¸ ¹Þ¾Æ¿Ô´Ù.)<br>
-![°ª¹Þ¾Æ¿À±â](./imgs/level0/0.png)<br>
+![°ª¹Þ¾Æ¿À±â](./imgs/level0/0.PNG)<br>
 ¹Ýº¹ ½ÇÇàÇÏ´Ï, °ªÀÌ ¹Ù²î´Â °ÍÀ» È®ÀÎ ÇÒ ¼ö ÀÖ¾ú´Ù.<br>
 Áï ¹ÞÀº Áï½Ã °ªÀ» °è»êÇÏ¿© º¸³»ÁÖÁö ¾ÊÀ¸¸é ´äÀ» ¾òÀ» ¼ö ¾ø¾îº¸ÀÎ´Ù.<br>
 Python Little Endian ÀÌ¶ó°í ±¸±Û¿¡ °Ë»öÇÏ´Ï, Struct¶ó´Â ¸ðµâÀ» ÃßÃµÇØÁÖ¾ú´Ù.<br>
 Struct ¸ðµâÀÇ »ç¿ë¹ýÀ» Àû¿ëÇÑ ÈÄ µð¹ö±ëÀ» ÁøÇàÇß´Ù.<br>
-![Æ©ÇÃÇü½Ä](./imgs/level0/1.png)<br>
+![Æ©ÇÃÇü½Ä](./imgs/level0/1.PNG)<br>
 ±×¸²°ú °°ÀÌ Æ©ÇÃ Çü½ÄÀ¸·Î ¹Þ¾Æ¿Â´Ù. [0]ÀÇ °ª¸¸ ÇÊ¿äÇÏ´Ï ÃßÃâÇÑ ÈÄ¿¡ °è»ê.<br>
 µð¹ö±ëÀ¸·Î °ªÀ» Àß °è»êÇÏ´Â Áö È®ÀÎÇß´Ù.<br>
-![Àß´õÇØÁü](./imgs/level0/2.png)<br>
+![Àß´õÇØÁü](./imgs/level0/2.PNG)<br>
 Àß ´õÇØÁ³À¸´Ï, Send·Î º¸³»¸é µÈ´Ù. °ªÀ» °è»êÇÒ ¶§ ºò ¿£µð¾ð Çü½ÄÀ¸·Î ¹Ù²åÀ¸´Ï ¸®Æ² ¿£µð¾ð Çü½ÄÀ¸·Î ¹Ù²Û ÈÄ º¸³»Áà¾ßÇÑ´Ù.<br>
 ±×·¨´õ´Ï ´äÀÌ µ¹¾Æ¿Ô´Ù.
-![´ä](./imgs/level0/3.png)<br>
+![´ä](./imgs/level0/3.PNG)<br>
 
 ```python
 import socket
