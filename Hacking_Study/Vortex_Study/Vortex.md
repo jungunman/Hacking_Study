@@ -186,3 +186,51 @@ Bandit은 linux 다루는데에 초점을 두기에 제외하고, FTZ보다 좀 많이 어려운 것 같다
 그래도 정복 도전!<br>
 
 #### 답 == _23anbT\rE_ 
+
+
+
+
+
+
+# vortex Level 2 )
+#### 문제) 
+```C
+#include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+
+
+int main(int argc, char **argv)
+{
+        char *args[] = { "/bin/tar", "cf", "/tmp/ownership.$$.tar", argv[1], argv[2], argv[3] };
+        execv(args[0], args);
+}
+```
+#### 문제 풀이) 
+소스 코드를 보면 tar 명령어를 실행하는 것을 볼 수 있다.<br>
+대충 감을 잡아보면 0번재 인자는 tar의 실행 위치, 1번째는 옵션, 2번째는 어디다가 어떻게 만들지 형식을 지정하는 것이다.<br>
+![Vortex2](./imgs/level2/0.PNG)<br>
+습관적으로 홈 디렉토리를 찾아본 후에, setuid 파일을 찾았다.<br>
+![Vortex2](./imgs/level2/1.PNG)<br>
+하나의 setuid가 있어 자세히 살펴 보았다. vortex3의 권한을 가지고 있고, 위의 소스코드와 같은 기능을 하니, 이 파일로 실행하면 압축이 되겠다.<br>
+![Vortex2](./imgs/level2/2.PNG)<br>
+내추측이 맞나 확인해보니, 맞았다. 없는 파일을 대입하니 그 파일이 없다고 안된다고 한다.<br>
+Vortex3의 권한을 가지고 있으니, 이 실행파일과 함께 Vortex3의 비밀번호가 담긴 파일을 압축하면 되겠다.<br>
+![Vortex2](./imgs/level2/3.PNG)<br>
+"/"을 지우라고 하시니, /etc/vortex_pass에 가서 ./vortex3을 읽어오도록 하자.
+![Vortex2](./imgs/level2/4.PNG)<br>
+명령어가 잘 실행되었다. /tmp/ownership.$$.tar이 잘만들어 졌을 것이다. 확인해봤다.<br>
+![Vortex2](./imgs/level2/5.PNG)<br>
+cat으로 읽어보려고 했으나 실패, 그 이유는 $$를 55로 읽고있는 모습이다. $문자를 \을 추가하여 무시하게 만들었다.<br>
+![Vortex2](./imgs/level2/6.PNG)<br>
+비밀번호가 나오는 것을 확인할 수 있다.<br>
+이중에서 무엇이 비밀번호일까? 의문이 들 수 있기에 한 가지 실험을 했다.<br>
+비슷한 예제를 만들어서 실험해보면 된다.<br>
+t1.txt에는 "go!"을 t2.txt에는 "dong"를 넣어두고 tar로 압축했다.<br>
+그리고 cat을 확인해본 결과.<br>
+![Vortex2](./imgs/level2/7.PNG)<br>
+Dong이 vortex2vortex2dong 이라고 나오는 것을 알 수 있다.<br>
+그럼 비밀번호는 .
+
+
+#### 답 == _64ncXTvx#_ 
