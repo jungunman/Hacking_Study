@@ -234,3 +234,50 @@ Dong이 vortex2vortex2dong 이라고 나오는 것을 알 수 있다.<br>
 
 
 #### 답 == _64ncXTvx#_ 
+
+
+
+# vortex Level 3 )
+#### 문제)
+```C
+/*
+ * 0xbadc0ded.org Challenge #02 (2003-07-08)
+ *
+ * Joel Eriksson <je@0xbadc0ded.org>
+ */
+
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+unsigned long val = 31337; //전역변수 헥사 값 == 0x7a69
+unsigned long *lp = &val; //전역변수, Val의 주소를 가지고 있음.
+
+int main(int argc, char **argv)
+{
+        unsigned long **lpp = &lp, *tmp; //**ipp가 *ip의 주소를 가리킴, unsigned long *tmp 생성.
+        char buf[128]; // 128byte 문자열 생성
+
+        if (argc != 2) //인자가 2개가 아니면 실행 불가
+                exit(1);//에러 발생
+
+        strcpy(buf, argv[1]); //argv[1]값을 buf에 복사 -> BOF
+
+        if (((unsigned long) lpp & 0xffff0000) != 0x08040000) //ipp를 비트 and를 통해 초기화. 틀리면 오류발생.
+                exit(2);
+
+        tmp = *lpp; // *tmp가 *ip를 가리킴
+        **lpp = (unsigned long) &buf; //**ipp 가 buf의 주소를 가리킴 == 전역 변수 val에 buf의 주소가 들어감.
+        // *lpp = tmp; // Fix suggested by Michael Weissbacher @mweissbacher 2013-06-30
+
+        exit(0); //실행 종료
+}
+```
+
+
+#### 문제 풀이) 
+난이도가 너무 급상승한듯하다...<br>
+문제는 풀었으나 정리가 필요해보인다. 정리하면서 이해도를 높여야 할 듯.<br>
+내일 정리 후 업로드 예정.<br>
+
+#### 답 == _2YmgK1=jw_ 
