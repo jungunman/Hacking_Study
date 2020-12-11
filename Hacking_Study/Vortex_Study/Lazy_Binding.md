@@ -9,6 +9,16 @@ Lazy Binding을 사용하는 이유는 , Static 방식으로 컴파일하면 라이브러리의 모든 코
 
 [Lazy Binding 및 GOT, RELRO - 참고문서](https://blackperl-security.gitlab.io/blog/2016/05/02/2016-05-02-linux-02/)<br>
 
+### GOT(Global Offset Table)란?
+PLT가 참조하는 테이블
+프로시저들의 주소가 들어있다.
+[GOT 및 PLT - 참고문서](https://blackperl-security.gitlab.io/blog/2016/03/07/2016-03-07-pltgot-01/)<br>
+
+### PLT(Procedure Linkage Table)란?
+외부 프로시저를 연결해주는 테이블
+PLT를 통해 다른 라이브러리에 있는 프로시저를 호출해 사용할 수 있다.
+[GOT 및 PLT - 참고문서](https://blackperl-security.gitlab.io/blog/2016/03/07/2016-03-07-pltgot-01/)<br>
+
 
 ### GOT overwrite란?
 GOT는 PLT(Procedure Linkage Table)가 참조하는 테이블.프로시저들의 주소가 들어있다.<br>
@@ -20,3 +30,4 @@ GOT는 PLT(Procedure Linkage Table)가 참조하는 테이블.프로시저들의 주소가 들어있�
 C언어에서 함수와 비슷한 개념으로, 차이점은 함수는 리턴 값을 남기지만 프로시저는 리턴 값을 남기지 않는다.
 함수는 input값에 의한 output이 반드시 정의(void 제외)되야하나, 프로시저는 그렇지 않다.
 [PLT GOT Procedure - 참고문서](https://bnzn2426.tistory.com/27)<br>
+
