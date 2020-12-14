@@ -13,10 +13,13 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Chapter3_Reverse">
+      <UniqueIdentifier>{d39852a7-9d66-4d81-b26c-4424d4ad8ad4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Hello_world.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Chapter3_Reverse\lv.cpp">
+      <Filter>소스 파일\Chapter3_Reverse</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
