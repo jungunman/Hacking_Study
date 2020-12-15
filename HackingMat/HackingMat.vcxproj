@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chapter3_Reverse\lv.cpp" />
+    <ClCompile Include="Chapter3_Reverse\not_pointer_asm.cpp" />
+    <ClCompile Include="Chapter3_Reverse\pointer_asm.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int main()
+int lv()
 {
 	int lv = 2; //변수 선언
 
