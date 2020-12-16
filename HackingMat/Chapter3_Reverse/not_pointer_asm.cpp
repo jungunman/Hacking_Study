@@ -13,5 +13,5 @@ int not_pointer_asm()
 	ret = inc(s);
 	printf("%d, %d \n", s, ret);
 
-
+	return 0;
 }
