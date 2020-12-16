@@ -39,7 +39,7 @@ Stub Code는 딱히 신경 안써도 됨<br>
 3개의 필드를 지니고 있음<br>
 > DWORD Signature;<br>
 > IMAGE_FILE_HEADER FileHeader;<br>
-> IMAGE_OPTIONAL_HEADER32 OptionalHeader;<br><br>
+> IMAGE_OPTIONAL_HEADER32 OptionalHeader;<br>
 
 [IMAGE_NT_HEADER 구조체 확인](https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers32)<br><br>
 
@@ -98,7 +98,7 @@ whinnt.h에 정의된 Machine 상수.<br>
 > \#define IMAGE_FILE_MACHINE_AMD64             0x8664  // AMD64 (K8)<br>
 > \#define IMAGE_FILE_MACHINE_M32R              0x9041  // M32R little-endian<br>
 > \#define IMAGE_FILE_MACHINE_CEE               0xC0EE<br>
-[자료 출처[(https://unabated.tistory.com/entry/PEPortable-Executable-구조)<br>
+[자료 출처](https://unabated.tistory.com/entry/PEPortable-Executable-구조)<br>
 
 ### #NumberOfSections
 PE 파일은 코드, 데이터, 리소스 등이 각각의 섹션에 나뉘어서 저장됨.<br>
