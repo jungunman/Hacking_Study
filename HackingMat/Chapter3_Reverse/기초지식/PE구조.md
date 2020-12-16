@@ -40,6 +40,7 @@ Stub Code는 딱히 신경 안써도 됨<br>
 > DWORD Signature;<br>
 > IMAGE_FILE_HEADER FileHeader;<br>
 > IMAGE_OPTIONAL_HEADER32 OptionalHeader;<br><br>
+
 [IMAGE_NT_HEADER 구조체 확인](https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_nt_headers32)<br><br>
 
 
@@ -49,7 +50,7 @@ PE 파일인가를 체크함.<br>
 IMAGE_DOS_HEADER의 e_magic 부분과 IMAGE_NT_HEADER의 Signature를 임의 값으로 수정하여 실행하면 오류남<br>
 FileHeader 필드와 OptionalHeader 필드는 구조체 형식이니 구조체 분석에 들어감.<br>
 
-##IMAGE_FILE_HEADER
+## IMAGE_FILE_HEADER
 PE 파일의 기본적인 내용이 담겨있음.<br><br>
 > WORD    Machine;<br>
 > WORD    NumberOfSections;<br>
@@ -58,13 +59,14 @@ PE 파일의 기본적인 내용이 담겨있음.<br><br>
 > DWORD   NumberOfSymbols;<br>
 > WORD    SizeOfOptionalHeader;<br>
 > WORD    Characteristics;<br>
+
 [IMAGE_FILE_HEADER 구조체 확인](https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_file_header)<br><br>
 
 ### #Machine
 파일이 어떤 CPU에서 동작할 수 있는지 실행할 수 있는 CPU의 타입을 정함.<br>
 whinnt.h에 정의된 Machine 상수.<br>
-![Machine의 상수 값](../imgs/PE구조/Machine 상수값.PNG)<br>
-[자료출처](https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_file_header)<br>
+![Machine의 상수 값](../imgs/PE구조/Machine_상수값.PNG)<br>
+[자료 출처](https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-image_file_header)<br>
 이 이외에도 더 있음.<br>
 > \#define IMAGE_FILE_MACHINE_UNKNOWN           0 <br>
 > \#define IMAGE_FILE_MACHINE_I386              0x014c  // Intel 386.<br>
