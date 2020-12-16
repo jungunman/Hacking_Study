@@ -3,7 +3,7 @@ Windows 환경의 실행 파일 포맷.<br>
 의식성이 있으면 플랫폼에 독립적.<br>
 확장자 (SYS, DLL, SCR, OCX, OBJ 등등)<br><br>
 
-![PE구조](./imgs/PE구조/PE구조.png)<br>
+![PE구조](../imgs/PE구조/PE구조.png)<br>
 __*왼쪽의 16진수는 크기를 섹션의 크기를 나타냄*__
 
 PE 순서<br>
