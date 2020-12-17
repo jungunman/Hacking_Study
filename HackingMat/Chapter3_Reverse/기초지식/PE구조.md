@@ -202,8 +202,8 @@ SizeOfcode와 Section Header(.text)의 크기가 일치하는지 봐야함<br><br>
 
 ### #ImageBase
 PE 파일이 메모리에 로드될 때의 시작 주소.<br>
-프로세스의 가상 메모리는 0~FFFFFFFF 범위임(32bit 경우), 이 범위에서<br>
-EXE,DLL은 user memory 영역인 0~7FFFFFFF 범위에 로딩이 되고,<br>
+프로세스의 가상 메모리는 0 ~ FFFFFFFF 범위임(32bit 경우), 이 범위에서<br>
+EXE,DLL은 user memory 영역인 0 ~ 7FFFFFFF 범위에 로딩이 되고,<br>
 SYS. 파일은 kernel memory 영역인 80000000~FFFFFFFF 범위에 로딩됨.<br>
 일반적으로 EXE 파일의 ImageBase 값은 00400000이고,<br>
 DLL파일의 ImageBase 값은 10000000임.<br>
