@@ -284,8 +284,110 @@ IMAGE_DATA_DIRECTORY 구조체의 VirtualAddress를 통해 가상 주소를 알 수 있으며, Si
 중요한 값은 EXPORT, IMPORT, RESOURCE, TLS, IAT이고 나중에 알아보도록<br>
 
 
+## 섹션 헤더
+각 섹션의 속성(Property)를 정의해둔 헤더.<br>
+.text, .data, .rdata섹션 등에 대한 정보를 알 수 있음<br>
+PE파일이 code, data, resource등을 나눠서 저장하는 이유는 프로그램의 안정성과 복잡함 저하.<br>
+섹션의 속성에는 file/memory에서의 시작 위치, 크기, 엑세스 권한등이 필요.<br>
+
+| 종류 | 액세스 권한 |
+|:---:|:---:|
+| code | 실행, 읽기 권한 |
+| data | 비실행, 읽기, 쓰기 권한 |
+| resourse | 비실행, 읽기 권한 |
 
 
+## IMAGE_SECTION_HEADER
+이 섹션이 가지고 있는 필드(11개) <br>
+
+```
+#define IMAGE_SIZEOF_SHORT_NAME              8
+ 
+typedef struct _IMAGE_SECTION_HEADER {
+    BYTE    Name[IMAGE_SIZEOF_SHORT_NAME];
+    union {
+            DWORD   PhysicalAddress;
+            DWORD   VirtualSize;
+    } Misc;
+    DWORD   VirtualAddress;
+    DWORD   SizeOfRawData;
+    DWORD   PointerToRawData;
+    DWORD   PointerToRelocations;
+    DWORD   PointerToLinenumbers;
+    WORD    NumberOfRelocations;
+    WORD    NumberOfLinenumbers;
+    DWORD   Characteristics;
+} IMAGE_SECTION_HEADER, *PIMAGE_SECTION_HEADER;
+ 
+#define IMAGE_SIZEOF_SECTION_HEADER          40
+```
+
+IMAGE_SECTION_HEADER 구조체 에서 알아야 할 중요 멤보는 이 표와 같다(나머지는 사용되지 않음.)<br>
+| 항목 | 의미 |
+|:---:|:---:|
+| VirtualSize | 메모리에서 섹션이 차지하는 크기 |
+| VirtualAddress | 메모리에서 섹션의 시작 주소(RVA) |
+| SizeOfRawData | 파일에서 섹션이 차지하는 크기 |
+| PointerToRawData | 파일에서 섹션의 시작 위치 |
+| Characteristics | 섹션의 속성(bit OR) |
+
+VirtualAddress 와 PointerToRawData는 아무 값이나 가질 수 없고<br>
+IMAGE_OPTIONAL_HEADER32에 정의된 SectionAlignment와 FileAlignment에 맞게 설정됨.<br><br>
+
+VirtualSize와 SizeOfRawData는 일반적으로 서로 다른 값을 지님.<br>
+_파일에서의 섹션 크기와 메모리에 로딩된 섹션의 크기가 다르다는 의미_<br><br>
+
+
+
+### #Name
+섹션의 이름을 나타냄<br>
+이름을 바꿀 수도, 비워둘 수도(NULL) 있으며 최대 8바이트까지 가능함.<br>
+고로 참고용일 뿐 어떤 정보로써 활용하기엔 100% 신뢰 할 수 없음.<br>
+섹션의 이름별 용도를 나눴음.<br>
+
+| 섹션명 | 용도 |
+|:--:|:--:|
+| .text | 코드, 실행, 읽기 속성을 지니며 컴파일 후의 결과가 이곳에 저장됨. 즉, 이 섹션은 실행되는 코드들이 들어가는 섹션 |
+| .data | 초기화, 읽기, 쓰기 속성을 지니며 초기화된 전역 변수를 가짐. |
+| .rdata | 초기화, 읽기 속성을 지니며 문자열 상수나  const로 선언된 변수처럼 읽기만 가능한 읽기전용 데이터 섹션. |
+| .bss | 비초기화, 읽기 쓰기 속성을 지니며 초기화되지 않은 전역 변수의 섹션. |
+| .edata | 초기화, 읽기 속성을 지니며 EAT와 관련된 정보가 들어가 있는 섹션. |
+| .idata | 초기화, 읽기, 쓰기 속성을 지니며 IAT와 관련된 정보가 들어가 있는 섹션. |
+| .rsrc | 초기화, 읽기 속성을 지니며 리소스가 저장되는 섹션. |
+
+### #VirtualSize
+PE 파일이 메모리에 로드되고 나서, 메모리에 섹션이 차지하는 크기를 나타냄<br>
+
+### #VirtualAddress 
+메모리에 로드되고 나서의 해당하는 섹션의 RVA 값.<br>
+
+### #SizeofRawData
+파일에서 섹션이 차지하는 크기<br>
+Optional 헤더에서 FileAlignment 값의 배수가 되도록 올림한 값이며,<br>
+실제로 사용되는 크기이고, 패딩을 제외한 크기임.<br>
+
+### #PointerToRawData
+파일에서 섹션의 시작 위치(Offset). (FileAlignment 값의 배수여야 함)
+
+### #Characteristics
+섹션의 속성 정보를 플래그로 지님.<br>
+이 이외에도 속성 정보가 더 있음.<br>
+```
+#define IMAGE_SCN_CNT_CODE                   0x00000020  // 코드로 채워진 섹션
+#define IMAGE_SCN_CNT_INITIALIZED_DATA       0x00000040  // 데이터가 초기화된 섹션
+#define IMAGE_SCN_CNT_UNINITIALIZED_DATA     0x00000080  // 데이터가 비초기화된 섹션
+#define IMAGE_SCN_MEM_EXECUTE                0x20000000  // 실행 가능한 섹션
+#define IMAGE_SCN_MEM_READ                   0x40000000  // 읽기가 가능한 섹션
+#define IMAGE_SCN_MEM_WRITE                  0x80000000  // 쓰기가 가능한 섹션
+```
+
+## RVA to RAW
+PE 파일이 메모리에 로딩되었을 때 각 섹션에서 메모리의 주소(RVA)와 파일의 시작위치를 매핑시키는 행위.<br>
+
+> RVA가 속해 있는 섹션을 찾는다.<br>
+> 간단한 비례식을 사용해서 파일의 시작위치를 계산한다.<br>
+> _RAW - PointerToRawData = RVA - VirtualAddress_<br>
+> _RAW = RVA - VirtualAddress + PointerToRawData_<br>
 
 
 ## 자료 출처 모음
